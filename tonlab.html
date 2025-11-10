@@ -125,8 +125,8 @@
     rat.style.position = 'fixed';
     rat.style.bottom = '20px';
     rat.style.left = '-80px';
-    rat.style.width = '60px';
-    rat.style.height = '40px';
+    rat.style.width = '80px';
+    rat.style.height = '60px';
     rat.style.backgroundImage = "url('TonCheese.png')";
     rat.style.backgroundSize = 'contain';
     rat.style.backgroundRepeat = 'no-repeat';
@@ -138,10 +138,10 @@
     const style = document.createElement('style');
     style.innerHTML = `
       @keyframes walkRat {
-        0% { left: -100px; transform: scaleX(1); }
-        49% { left: calc(100% + 100px); transform: scaleX(1); }
-        50% { transform: scaleX(-1); }
-        100% { left: -100px; transform: scaleX(-1); }
+        0% { left: -100px; transform: scaleX(-1); }
+        49% { left: calc(100% + 100px); transform: scaleX(-1); }
+        50% { transform: scaleX(1); }
+        100% { left: -100px; transform: scaleX(1); }
       }
     `;
     document.head.appendChild(style);
