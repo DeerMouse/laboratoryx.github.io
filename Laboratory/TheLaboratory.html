@@ -3,219 +3,189 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>The Laboratory — Archives</title>
-  <meta name="description" content="The Laboratory Archives: anomaly index, founder logs, and test records." />
+  <title>The Laboratory — Index</title>
+  <meta name="description" content="The Laboratory archive index built by Min." />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 
   <style>
     :root{
-      --bg: #0b0e12;
-      --panel: #11161d;
-      --panel-2:#0e1319;
-      --text: #e6edf3;
-      --muted:#93a2b3;
-      --brand: #64b5ff;
-      --brand-2:#3fd2c7;
-      --accent: #9b8cff;
-      --danger:#ff6370;
-      --ok:#4cd195;
-      --card:#121821;
-      --card-border: rgba(255,255,255,0.06);
+      /* Min's monochrome palette with subtle hazard accents */
+      --bg: #0e0f12;
+      --panel: #121418;
+      --panel-2:#15181d;
+      --ink: #e7e9ed;
+      --muted:#8c96a3;
+      --line: rgba(255,255,255,0.08);
+      --accent:#e6b422;   /* amber hazard note */
+      --accent-2:#6ee7b7; /* mint ok */
+      --danger:#ef4444;   /* red */
+      --warn:#f59e0b;     /* yellow amber */
+      --black:#aeb4bf;    /* for black class chip text */
+      --card:#14171c;
       --shadow: 0 10px 30px rgba(0,0,0,.35);
-      --radius-xl: 18px;
-      --radius-lg: 14px;
-      --radius-md: 10px;
-      --radius-sm: 8px;
-      --ring: 0 0 0 2px rgba(100,181,255,.25);
+      --r-lg: 16px;
+      --r-md: 12px;
+      --r-sm: 10px;
+      --ring: 0 0 0 2px rgba(230,180,34,.18);
     }
-    /* Light mode vars */
     [data-theme="light"]{
-      --bg:#f6f8fb;
+      --bg:#f6f7fb;
       --panel:#ffffff;
-      --panel-2:#eef2f7;
-      --text:#0f1720;
-      --muted:#485567;
-      --brand:#1565d8;
-      --brand-2:#0aaea3;
-      --accent:#6b5bff;
-      --danger:#d62839;
-      --ok:#119c6f;
+      --panel-2:#eef1f6;
+      --ink:#0f141a;
+      --muted:#5b6574;
+      --line: rgba(0,0,0,0.08);
+      --accent:#b08900;
+      --accent-2:#118f6b;
+      --danger:#b91c1c;
+      --warn:#a16207;
+      --black:#374151;
       --card:#ffffff;
-      --card-border: rgba(0,0,0,0.06);
       --shadow: 0 10px 30px rgba(0,0,0,.08);
-      --ring: 0 0 0 2px rgba(21,101,216,.18);
+      --ring: 0 0 0 2px rgba(176,137,0,.18);
     }
 
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
       margin:0;
-      font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Apple Color Emoji","Segoe UI Emoji", "Segoe UI Symbol";
-      background: radial-gradient(1200px 800px at 80% -10%, rgba(100,181,255,.08), transparent 60%),
-                  radial-gradient(1400px 900px at -10% 90%, rgba(63,210,199,.06), transparent 60%), var(--bg);
-      color:var(--text);
+      font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
+      background:
+        radial-gradient(1200px 800px at 85% -10%, rgba(230,180,34,.06), transparent 60%),
+        radial-gradient(1200px 900px at -10% 90%, rgba(110,231,183,.05), transparent 60%),
+        var(--bg);
+      color:var(--ink);
     }
 
     .layout{
       display:grid;
       grid-template-columns: 280px 1fr;
-      grid-template-rows: 70px calc(100dvh - 70px);
+      grid-template-rows: 64px calc(100dvh - 64px);
       min-height:100dvh;
     }
     header{
       grid-column: 1/3;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      padding:12px 18px;
-      background:linear-gradient(180deg, rgba(255,255,255,.02), transparent), var(--panel-2);
-      border-bottom:1px solid var(--card-border);
-      box-shadow: var(--shadow);
-      position:sticky; top:0; z-index:30;
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      padding:10px 16px; background: var(--panel-2);
+      border-bottom:1px solid var(--line); position:sticky; top:0; z-index:20;
     }
-    .brand{
-      display:flex; align-items:center; gap:12px;
-    }
-    .logo{
-      width:40px; height:40px; border-radius:12px;
+    .brand{display:flex; align-items:center; gap:12px;}
+    .mark{
+      width:36px; height:36px; border-radius:10px;
       background:
-        conic-gradient(from 120deg, var(--brand), var(--accent), var(--brand-2), var(--brand));
-      box-shadow:0 0 0 3px rgba(255,255,255,.04), 0 12px 30px rgba(79,209,197,.15);
+        conic-gradient(from 180deg, #20242b, #1a1f27, #2a2f38);
+      border:1px solid var(--line);
+      position:relative;
+    }
+    .mark:after{
+      content:""; position:absolute; inset:7px; border-radius:6px;
+      border:2px solid var(--accent); transform: rotate(8deg);
+      opacity:.85;
     }
     .brand h1{
-      font-size:18px; margin:0; letter-spacing:.3px; font-weight:800;
-      background: linear-gradient(90deg, var(--text), var(--brand-2));
-      -webkit-background-clip: text; background-clip:text; color:transparent;
+      margin:0; font-size:16px; letter-spacing:.12em; text-transform:uppercase; font-weight:800;
     }
-    .hdr-actions{display:flex; align-items:center; gap:10px;}
+
     .btn{
-      appearance:none; border:1px solid var(--card-border); background:var(--panel);
-      color:var(--text); border-radius:12px; padding:10px 14px; font-weight:600;
-      transition:.2s ease; cursor:pointer; box-shadow: var(--shadow);
+      border:1px solid var(--line); background:var(--panel); color:var(--ink);
+      border-radius:10px; padding:8px 12px; font-weight:600; cursor:pointer; transition:.18s;
     }
     .btn:hover{ transform: translateY(-1px); }
     .btn:active{ transform: translateY(0); }
-    .btn.primary{ background:linear-gradient(180deg, rgba(100,181,255,.18), rgba(100,181,255,.08)), var(--panel); border-color: rgba(100,181,255,.35);}
-    .btn.ghost{ background:transparent; border-color:var(--card-border); }
+    .btn.ghost{ background:transparent; }
+    .btn.primary{ border-color: rgba(230,180,34,.35); box-shadow: var(--shadow); }
 
     aside{
-      border-right:1px solid var(--card-border);
-      background: linear-gradient(180deg, rgba(255,255,255,.02), transparent), var(--panel);
-      padding:16px;
-      position:sticky; top:70px; height: calc(100dvh - 70px); overflow:auto;
+      border-right:1px solid var(--line); background:var(--panel);
+      padding:14px; position:sticky; top:64px; height: calc(100dvh - 64px); overflow:auto;
     }
-    nav .section-title{
+    nav .label{
       font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--muted);
-      margin:16px 10px 8px;
+      margin:12px 8px 8px;
     }
-    .nav-list{display:flex; flex-direction:column; gap:6px; padding:0; margin:0; list-style:none;}
-    .nav-link{
-      display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:10px;
-      color:var(--text); text-decoration:none; font-weight:600; border:1px solid transparent;
+    .nav{ list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:6px; }
+    .nav a{
+      display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--ink);
+      padding:10px 12px; border-radius:10px; border:1px solid transparent;
     }
-    .nav-link:hover{ background: rgba(100,181,255,.08); border-color: rgba(100,181,255,.25); }
-    .nav-link.active{ background: linear-gradient(180deg, rgba(100,181,255,.18), rgba(100,181,255,.08)); border-color: rgba(100,181,255,.4); }
+    .nav a:hover{ background:rgba(255,255,255,.03); border-color: var(--line); }
+    .nav a.active{ background:linear-gradient(180deg, rgba(230,180,34,.12), rgba(230,180,34,.05)); border-color: rgba(230,180,34,.35); }
 
-    main{
-      padding:24px; overflow:auto;
-    }
+    main{ padding:18px; overflow:auto; }
+
     .hero{
-      display:grid; grid-template-columns: 1.3fr 1fr; gap:18px; align-items:stretch; margin-bottom:18px;
+      display:grid; grid-template-columns: 1.15fr 1fr; gap:14px; margin-bottom:14px;
     }
     .card{
-      background: linear-gradient(180deg, rgba(255,255,255,.02), transparent), var(--card);
-      border:1px solid var(--card-border);
-      border-radius: var(--radius-xl);
-      box-shadow: var(--shadow);
+      background:var(--card); border:1px solid var(--line); border-radius: var(--r-lg);
+      padding:18px; box-shadow: var(--shadow);
     }
-    .hero .card{ padding:22px; }
-    .hero h2{ margin:0 0 8px 0; font-size:28px; letter-spacing:.3px; }
+    .hero h2{ margin:0 0 6px 0; font-size:26px; }
     .muted{ color:var(--muted); }
 
-    .kpis{ display:grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap:12px; margin-top:14px; }
-    .kpi{ padding:14px; border-radius:14px; border:1px solid var(--card-border); background:var(--panel); }
-    .kpi strong{ font-size:22px; display:block; }
-    .kpi span{ font-size:12px; color:var(--muted); }
-
-    .pill{
-      display:inline-flex; align-items:center; gap:8px; padding:8px 10px; border-radius:999px;
-      background: rgba(63,210,199,.12); border:1px solid rgba(63,210,199,.35); color:var(--text); font-weight:700; font-size:12px;
+    .bar{
+      display:flex; gap:10px; align-items:center; margin-top:8px; flex-wrap:wrap;
     }
-    .badge{ padding:4px 8px; border-radius:999px; font-weight:700; font-size:11px; border:1px solid var(--card-border); color:var(--muted); }
-    .badge.red{ background: rgba(214,40,57,.1); border-color: rgba(214,40,57,.35); color:#ff9aa5; }
-    .badge.yellow{ background: rgba(255,186,0,.08); border-color: rgba(255,186,0,.35); color:#ffd479; }
-    .badge.black{ background: rgba(108,117,125,.12); border-color: rgba(108,117,125,.35); color:#c9ced6; }
+    .chip{
+      padding:6px 10px; border-radius:999px; border:1px solid var(--line); font-weight:700; font-size:11px; color:var(--muted);
+    }
 
-    .grid{ display:grid; gap:14px; grid-template-columns: repeat(12, minmax(0,1fr)); }
+    .controls{
+      display:flex; gap:10px; flex-wrap:wrap; margin:10px 0 0;
+    }
+    .search{
+      display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:10px;
+      background:var(--panel); border:1px solid var(--line); min-width:220px;
+    }
+    .search input{ flex:1; background:transparent; border:none; outline:none; color:var(--ink); }
+    .select{
+      background:var(--panel); border:1px solid var(--line); color:var(--ink);
+      border-radius:10px; padding:10px 12px;
+    }
+
+    .grid{ display:grid; grid-template-columns: repeat(12, minmax(0,1fr)); gap:12px; }
     .col-12{ grid-column: span 12; }
-    .col-6{ grid-column: span 6; }
-    .col-4{ grid-column: span 4; }
-    .col-8{ grid-column: span 8; }
 
-    .searchbar{
-      display:flex; align-items:center; gap:10px; padding:12px 14px; border-radius:14px;
-      background:var(--panel); border:1px solid var(--card-border); box-shadow: var(--shadow);
+    .lr-list{
+      display:grid; grid-template-columns: repeat( auto-fill, minmax(220px,1fr) ); gap:12px;
+      margin-top:10px;
     }
-    .searchbar input{
-      flex:1; background:transparent; border:none; outline:none; color:var(--text); font-size:14px;
+    .lr{
+      padding:14px; border-radius:14px; border:1px solid var(--line); background:var(--panel-2);
+      position:relative; transition:.18s; display:flex; flex-direction:column; gap:8px;
     }
+    .lr:hover{ transform: translateY(-2px); box-shadow: var(--shadow); }
+    .lr h4{ margin:0; font-size:16px; letter-spacing:.3px; }
+    .lr .id{ font-size:12px; color:var(--muted); letter-spacing:.1em; text-transform:uppercase; }
+    .lr .status{
+      display:inline-flex; align-items:center; gap:8px; font-size:11px; font-weight:800; letter-spacing:.06em;
+      padding:6px 8px; border-radius:999px; width:max-content; border:1px solid var(--line);
+    }
+    .s-yellow{ background: rgba(245,158,11,.12); color:#ffd482; border-color: rgba(245,158,11,.35); }
+    .s-red{ background: rgba(239,68,68,.12); color:#ff9aa0; border-color: rgba(239,68,68,.35); }
+    .s-black{ background: rgba(148,163,184,.12); color:#cfd5de; border-color: rgba(148,163,184,.35); }
+    .s-neutral{ background: rgba(107,114,128,.12); color:#c6cbd3; border-color: rgba(107,114,128,.35); }
+    .s-undef{ background: rgba(255,255,255,.06); color:var(--muted); border-color: var(--line); }
 
-    .lr-list{ display:grid; grid-template-columns: repeat( auto-fill, minmax(260px,1fr) ); gap:14px; }
-    .lr-card{
-      padding:16px; border-radius:16px; border:1px solid var(--card-border);
-      background: linear-gradient(180deg, rgba(255,255,255,.02), transparent), var(--panel);
-      transition: .18s ease; position:relative; overflow:hidden; cursor:pointer;
+    .lr .open{
+      margin-top:auto;
+      display:inline-flex; align-items:center; justify-content:center; gap:8px;
+      padding:10px 12px; border:1px solid var(--line); border-radius:10px; color:var(--ink);
+      text-decoration:none; background:linear-gradient(180deg, rgba(255,255,255,.02), transparent);
+      font-weight:700;
     }
-    .lr-card:hover{ transform: translateY(-3px); box-shadow: var(--shadow); }
-    .lr-card h4{ margin:0 0 6px 0; }
-    .lr-card .small{ font-size:12px; color:var(--muted); }
-    .lr-card .chip{
-      position:absolute; top:12px; right:12px; font-size:11px; padding:6px 8px; border-radius:999px;
-      border:1px solid var(--card-border); background:rgba(255,255,255,.03); color:var(--muted); font-weight:700;
-    }
-
-    .doc{
-      padding:22px; line-height:1.65;
-    }
-    .doc h2{ margin-top:0 }
-    .doc pre{
-      background: var(--panel);
-      border:1px solid var(--card-border);
-      padding:14px; border-radius:12px; overflow:auto;
-    }
-    code{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace }
+    .lr .open:hover{ box-shadow: var(--shadow); border-color: rgba(230,180,34,.35); }
 
     .footer{
-      margin-top:18px; padding:14px; border-top:1px solid var(--card-border); color:var(--muted); font-size:13px;
+      margin-top:14px; padding:12px; border-top:1px solid var(--line); color:var(--muted); font-size:13px;
       display:flex; align-items:center; justify-content:space-between; gap:10px;
     }
 
-    /* Modal */
-    .modal{
-      position:fixed; inset:0; display:none; align-items:center; justify-content:center; padding:24px; z-index:50;
-      background: rgba(0,0,0,.45);
-    }
-    .modal.open{ display:flex; }
-    .modal-panel{
-      width:min(820px, 96vw); max-height:90dvh; overflow:auto; background:var(--panel); border:1px solid var(--card-border);
-      border-radius:18px; box-shadow: var(--shadow); padding:18px 18px 8px;
-    }
-    .modal-head{ display:flex; align-items:center; justify-content:space-between; gap:10px; padding:6px 6px 10px 6px; position:sticky; top:0; background: var(--panel); }
-    .close{ border:none; background:transparent; color:var(--muted); font-size:20px; cursor:pointer; padding:8px; border-radius:10px;}
-    .close:hover{ background: rgba(255,255,255,.05); }
-
-    /* Responsive */
     @media (max-width: 980px){
       .layout{ grid-template-columns: 1fr; grid-template-rows: auto auto 1fr; }
-      aside{ position:static; height:auto; border-right:none; border-bottom:1px solid var(--card-border); }
+      aside{ position:static; height:auto; border-right:none; border-bottom:1px solid var(--line); }
       .hero{ grid-template-columns: 1fr; }
-      .kpis{ grid-template-columns: repeat(2, minmax(0,1fr)); }
-    }
-    @media (max-width: 560px){
-      header{ gap:8px; }
-      .brand h1{ font-size:16px; }
     }
   </style>
 </head>
@@ -223,338 +193,275 @@
   <div class="layout">
     <header>
       <div class="brand">
-        <div class="logo" aria-hidden="true"></div>
-        <h1>The Laboratory — Archives</h1>
+        <div class="mark" aria-hidden="true"></div>
+        <h1>The Laboratory — Index</h1>
       </div>
-      <div class="hdr-actions">
-        <button class="btn ghost" id="themeToggle" title="Toggle theme">🌗 Theme</button>
-        <a class="btn primary" href="https://github.com/" target="_blank" rel="noreferrer">View on GitHub</a>
+      <div style="display:flex; gap:8px; align-items:center;">
+        <button class="btn ghost" id="theme">🌗 Theme</button>
+        <a class="btn primary" href="https://github.com/" target="_blank" rel="noreferrer">GitHub</a>
       </div>
     </header>
 
     <aside>
       <nav>
-        <div class="section-title">Navigation</div>
-        <ul class="nav-list" id="nav">
-          <li><a href="#/home" class="nav-link active">🏠 Home</a></li>
-          <li><a href="#/anomalies" class="nav-link">🧪 Anomalies</a></li>
-          <li><a href="#/docs/lr-001" class="nav-link">📄 LR-001 Document</a></li>
-          <li><a href="#/about" class="nav-link">ℹ️ About</a></li>
+        <div class="label">Navigation</div>
+        <ul class="nav">
+          <li><a href="#/" class="active">Home</a></li>
+          <li><a href="#/anomalies">Anomaly Index</a></li>
+          <li><a href="#/notes">Notes</a></li>
+          <li><a href="#/about">About</a></li>
         </ul>
 
-        <div class="section-title">Quick Stats</div>
-        <div class="kpis">
-          <div class="kpi"><strong id="kpiTotal">—</strong><span>Total LR Files</span></div>
-          <div class="kpi"><strong id="kpiYellow">—</strong><span>Yellow</span></div>
-          <div class="kpi"><strong id="kpiRed">—</strong><span>Red</span></div>
-          <div class="kpi"><strong id="kpiBlack">—</strong><span>Black</span></div>
+        <div class="label">Status Legend</div>
+        <div class="bar">
+          <span class="chip s-yellow">Yellow</span>
+          <span class="chip s-red">Red</span>
+          <span class="chip s-black">Black</span>
+          <span class="chip s-neutral">Neutralized</span>
+          <span class="chip s-undef">Undefined</span>
         </div>
+
+        <div class="label">Built by</div>
+        <div class="chip">Min Kuznetzov (Intern)</div>
       </nav>
     </aside>
 
-    <main id="app">
-      <!-- Content rendered by router -->
-    </main>
-  </div>
-
-  <!-- Modal for LR detail -->
-  <div class="modal" id="lrModal" aria-hidden="true" role="dialog" aria-label="LR details">
-    <div class="modal-panel">
-      <div class="modal-head">
-        <h3 id="modalTitle" style="margin:0;"></h3>
-        <button class="close" id="modalClose" aria-label="Close">✕</button>
-      </div>
-      <div id="modalBody" class="doc"></div>
-    </div>
+    <main id="app"></main>
   </div>
 
   <script>
-    // --- Data -----------------------------------------------------------------
-    const LR_DATA = [
-      {
-        id:"lr-001",
-        number:"LR-001",
-        codename:"Serial Killer",
-        zone:"Red",
-        status:"Active",
-        summary:"Immortal pursuit-class entity. Hunts one designated target at a time.",
-        details: `
-<h2>LR-001 — “Serial Killer”</h2>
-<p><strong>Classification:</strong> Red Zone<br>
-<strong>Status:</strong> Active<br>
-<strong>Threat Type:</strong> Pursuit-Class</p>
-<p><strong>Overview:</strong> LR-001 relentlessly hunts a single target. It ignores all others until that target dies, then immediately re-targets the next subject in join order.</p>
-<ul>
-  <li><strong>Target Selection:</strong> First person to enter becomes first target; upon death, next joiner is targeted.</li>
-  <li><strong>Immortality:</strong> No known termination method.</li>
-  <li><strong>Collateral:</strong> Minimal unless obstructed.</li>
-</ul>
-<p><strong>Founder Notes</strong><br>
-<i>Ton:</i> “He only wants one person at a time. Polite.”<br>
-<i>Light:</i> “Stop running toward the crowd when he chases you.”</p>
-        `
-      },
-      // Example placeholders you can fill as you publish more entries
-      {
-        id:"lr-002",
-        number:"LR-002",
-        codename:"Wau Tak Jadi",
-        zone:"Yellow",
-        status:"Active",
-        summary:"Glitched wau-kite artifact with checkpoint-like teleport behavior.",
-        details: `
-<h2>LR-002 — “Wau Tak Jadi”</h2>
-<p><strong>Classification:</strong> Yellow Zone<br>
-<strong>Status:</strong> Active</p>
-<p>Behaves as a positional checkpoint when grasped/ungasped; exhibits illusions to observers. Frequently used for mischief during tests.</p>
-        `
-      },
-      {
-        id:"lr-003",
-        number:"LR-003",
-        codename:"Orb Thingy",
-        zone:"Yellow",
-        status:"Active",
-        summary:"Harmless-seeming orb that marks subjects. Ton reports sporadic damage; unverified.",
-        details: `
-<h2>LR-003 — “Orb Thingy”</h2>
-<p><strong>Classification:</strong> Yellow Zone<br>
-<strong>Status:</strong> Active</p>
-<p>Projects an orb marker above individuals. Founder dispute over hazard; incidents reported only when Ton tested it.</p>
-        `
-      },
-      {
-        id:"lr-004",
-        number:"LR-004",
-        codename:"Ghost Thingy",
-        zone:"Yellow",
-        status:"Active",
-        summary:"Electronics flicker when approached; attacks if cornered.",
-        details: `
-<h2>LR-004 — “Ghost Thingy”</h2>
-<p><strong>Classification:</strong> Yellow Zone<br>
-<strong>Status:</strong> Active</p>
-<p>Distorts lights and devices when a person nears; non-hostile until trapped. Founder Light scared; Ton called it 'building issue' at first.</p>
-        `
-      }
-    ];
+    // ---------- DATA (Minimal: index only; each LR opens its own file) ----------
+    // Known entries from your lore; others default to Undefined.
+    const KNOWN = {
+      "LR-001": { codename: "Serial Killer", status: "Red" },
+      "LR-002": { codename: "Wau Tak Jadi", status: "Yellow" },
+      "LR-003": { codename: "Orb Thingy", status: "Yellow" },
+      "LR-004": { codename: "Ghost Thingy", status: "Yellow" },
+      "LR-008": { codename: "The Introvert", status: "Yellow" },
+      "LR-015": { codename: "The Floor Is Lava", status: "Black" },
+      "LR-016": { codename: "—", status: "Neutralized" },
+      "LR-017": { codename: "Mother of Tundra", status: "Black" },
+      "LR-018": { codename: "Murderous Rat", status: "Neutralized" }
+      // LR-019 (Rendang Pak Munawer) not added yet → leave Undefined as requested
+    };
 
-    // --- Utilities ------------------------------------------------------------
-    const $ = sel => document.querySelector(sel);
-    const $$ = sel => Array.from(document.querySelectorAll(sel));
+    // Build 001..030
+    const LR = Array.from({length:30}, (_,i)=>{
+      const n = (i+1).toString().padStart(3,'0');
+      const id = `LR-${n}`;
+      const known = KNOWN[id] || null;
+      return {
+        id,
+        codename: known?.codename || "Undefined",
+        status: known?.status || "Undefined",
+        href: `lr${n}.html`
+      };
+    });
+
+    // ---------- UTIL ----------
+    const $ = s => document.querySelector(s);
+    const $$ = s => Array.from(document.querySelectorAll(s));
+
+    function statusClass(s){
+      switch((s||"").toLowerCase()){
+        case "yellow": return "s-yellow";
+        case "red": return "s-red";
+        case "black": return "s-black";
+        case "neutralized": return "s-neutral";
+        default: return "s-undef";
+      }
+    }
 
     function setTheme(next){
       const root = document.body;
       const curr = root.getAttribute('data-theme') || 'dark';
-      const final = next || (curr === 'dark' ? 'light' : 'dark');
-      root.setAttribute('data-theme', final);
-      localStorage.setItem('labTheme', final);
+      const fin = next || (curr === 'dark' ? 'light' : 'dark');
+      root.setAttribute('data-theme', fin);
+      localStorage.setItem('labTheme', fin);
     }
-    const savedTheme = localStorage.getItem('labTheme');
-    if(savedTheme) document.body.setAttribute('data-theme', savedTheme);
+    const saved = localStorage.getItem('labTheme');
+    if(saved) document.body.setAttribute('data-theme', saved);
 
-    // KPIs
-    function renderKpis(){
-      $('#kpiTotal').textContent = LR_DATA.length;
-      $('#kpiYellow').textContent = LR_DATA.filter(x=>x.zone==='Yellow').length;
-      $('#kpiRed').textContent = LR_DATA.filter(x=>x.zone==='Red').length;
-      $('#kpiBlack').textContent = LR_DATA.filter(x=>x.zone==='Black').length;
-    }
-
-    // Router
-    function setActiveNav(hash){
-      $$('#nav .nav-link').forEach(a=>{
-        a.classList.toggle('active', a.getAttribute('href') === hash);
-      });
-    }
-
+    // ---------- PAGES ----------
     function pageHome(){
       return `
         <section class="hero">
           <div class="card">
-            <h2>Welcome, Scientist.</h2>
-            <p class="muted">This is the public archive of <strong>The Laboratory</strong>. Browse LR files, read field notes, and pretend the Founders have a plan.</p>
-            <div style="display:flex; gap:10px; margin:14px 0 6px;">
-              <span class="pill">Experimental • Unethical • Fun</span>
+            <h2>Laboratory Archive Index</h2>
+            <p class="muted">A simple registry of LR files. Numbers reflect <em>discovery</em>, not strength. Built by Min to reduce confusion.</p>
+            <div class="bar">
+              <span class="chip">No Ethics Board</span>
+              <span class="chip">Test • Observe • Cross-Test</span>
+              <span class="chip">Do Not Sell or Release</span>
             </div>
-            <div style="margin-top:16px; display:flex; gap:10px; flex-wrap:wrap;">
-              <a class="btn primary" href="#/anomalies">Browse Anomalies</a>
-              <a class="btn" href="#/docs/lr-001">Read LR-001</a>
+            <div class="controls">
+              <a class="btn" href="#/anomalies">Open Anomaly Index</a>
+              <button class="btn ghost" id="quickAll">Show All (Grid)</button>
             </div>
           </div>
           <div class="card">
-            <h2 style="margin-top:0;">Latest Notes</h2>
-            <ul class="muted" style="margin:0 0 8px 18px;">
-              <li>LR-001 remains immortal. Annoying.</li>
-              <li>LR-002 teleport antics continue. Ton laughs, Light sighs.</li>
-              <li>Min posted a bigger “Dummy Here” sign. Still ignored.</li>
-              <li>“Green Zone” removed from paperwork. Boring.</li>
+            <h2 style="margin:0 0 6px 0;">Bulletin</h2>
+            <ul class="muted" style="margin:0 0 6px 18px;">
+              <li>LR-016 listed <strong>Neutralized</strong>. Details unavailable.</li>
+              <li>LR-017 remains <strong>Black</strong>. Door timing enforced.</li>
+              <li>Mirrors deployed east wing (temporary).</li>
+              <li>“Green Zone” removed from classification. Boring.</li>
             </ul>
-            <div class="badge red">Warning: Mirrors deployed in east wing</div>
-          </div>
-        </section>
-
-        <section class="grid">
-          <div class="col-12">
-            <div class="card" style="padding:16px;">
-              <div class="searchbar">
-                <span>🔎</span>
-                <input id="search" placeholder="Search LR number, codename, or zone…" />
-              </div>
-              <div id="lrList" class="lr-list" style="margin-top:12px;"></div>
+            <div class="bar" style="margin-top:8px;">
+              <span class="chip">Clerk: Min</span>
+              <span class="chip">Mercenary: Mia</span>
             </div>
           </div>
         </section>
-
+        <section class="card">
+          <div class="controls">
+            <div class="search" style="flex:1">
+              <span>🔎</span>
+              <input id="q" placeholder="Search LR number or codename…" />
+            </div>
+            <select id="status" class="select" aria-label="Filter by status">
+              <option value="">All Status</option>
+              <option>Yellow</option>
+              <option>Red</option>
+              <option>Black</option>
+              <option>Neutralized</option>
+              <option>Undefined</option>
+            </select>
+          </div>
+          <div id="grid" class="lr-list"></div>
+        </section>
         <div class="footer">
-          <span>© The Laboratory • Founders: Light & Ton_Cheese</span>
-          <span>Built for GitHub Pages</span>
+          <span>© The Laboratory • Founders: Light & Ton</span>
+          <span>Built by Min. If broken, it wasn’t me.</span>
         </div>
       `;
     }
 
     function pageAnomalies(){
       return `
-        <section class="card" style="padding:18px;">
-          <h2 style="margin-top:0;">Anomalies</h2>
-          <p class="muted">A selection of LR files. Order reflects discovery, not power.</p>
-          <div class="searchbar" style="margin-top:12px;">
-            <span>🔎</span>
-            <input id="search" placeholder="Filter anomalies…" />
+        <section class="card">
+          <h2 style="margin:0 0 8px 0;">Anomaly Index</h2>
+          <p class="muted">Select a file to open its dedicated page <code>(lr001.html … lr030.html)</code>.</p>
+          <div class="controls">
+            <div class="search" style="flex:1">
+              <span>🔎</span>
+              <input id="q" placeholder="Search LR number or codename…" />
+            </div>
+            <select id="status" class="select" aria-label="Filter by status">
+              <option value="">All Status</option>
+              <option>Yellow</option>
+              <option>Red</option>
+              <option>Black</option>
+              <option>Neutralized</option>
+              <option>Undefined</option>
+            </select>
           </div>
-          <div id="lrList" class="lr-list" style="margin-top:12px;"></div>
+          <div id="grid" class="lr-list"></div>
         </section>
         <div class="footer">
-          <span>Yellow = won’t kill you (until you do something). Red = will kill you. Black = kills the world.</span>
+          <span>Yellow = won’t kill you (until you do something). Red = will kill you. Black = might end everything.</span>
+          <span>Neutralized = removed. Undefined = not filed yet.</span>
         </div>
       `;
     }
 
-    function pageDoc(id){
-      const entry = LR_DATA.find(x => x.id === id);
-      const title = entry ? `${entry.number} — ${entry.codename}` : 'Document';
-      const body = entry ? entry.details : `<p>Document not found.</p>`;
+    function pageNotes(){
       return `
-        <section class="card doc">
-          <h2 style="margin:0 0 6px 0;">${title}</h2>
-          <div class="badge ${entry?.zone?.toLowerCase() || ''}">${entry?.zone || '—'} Zone</div>
-          <div style="height:10px"></div>
-          ${body}
-          <pre><code>Filed by: Min Kuznetzov (intern). Reviewed by Founders.</code></pre>
+        <section class="card">
+          <h2 style="margin:0 0 6px 0;">Notes</h2>
+          <ul class="muted" style="margin:0 0 6px 18px;">
+            <li>This page does not include anomaly content. Each LR has its own HTML file.</li>
+            <li>If a page isn’t ready yet, the index still links it (Undefined).</li>
+            <li>Min will fill content when the Founders stop yelling.</li>
+          </ul>
         </section>
-        <div class="footer">
-          <span>Status: Open for cross-tests • Do not sell anomalies</span>
-          <span>Document ID: ${entry?.number || '—'}</span>
-        </div>
       `;
     }
 
     function pageAbout(){
       return `
-        <section class="card doc">
-          <h2>About The Laboratory</h2>
-          <p>No ethics board. No security department. Just testing. If it doesn’t belong, it’s neutralized.</p>
+        <section class="card">
+          <h2 style="margin:0 0 6px 0;">About</h2>
+          <p>The Laboratory exists to test, not to protect. All anomalies are property of the Founders. Do not sell or release them.</p>
           <ul>
             <li><strong>Yellow:</strong> Won’t kill you… unless you do something stupid.</li>
             <li><strong>Red:</strong> Will kill you.</li>
-            <li><strong>Black:</strong> Might kill the planet.</li>
+            <li><strong>Black:</strong> Might kill the world.</li>
+            <li><strong>Neutralized:</strong> Removed from circulation.</li>
+            <li><strong>Undefined:</strong> Placeholder entry; page not written yet.</li>
           </ul>
-          <p><strong>Ownership:</strong> All anomalies are property of Founders Light & Ton. You may test, cross-test, and observe. You may not sell or release.</p>
-          <p><strong>Key NPCs:</strong> Min (intern, polite), Mia (mercenary, unpredictable).</p>
+          <p class="muted">This index was assembled by Min Kuznetzov.</p>
         </section>
       `;
     }
 
-    function renderLRList(rootId, filter=""){
-      const root = document.getElementById(rootId);
-      const q = filter.trim().toLowerCase();
-      const items = LR_DATA.filter(x=>{
-        if(!q) return true;
-        return (x.number + " " + x.codename + " " + x.zone).toLowerCase().includes(q);
+    // ---------- RENDER ----------
+    function renderList(filterQ="", filterStatus=""){
+      const root = $('#grid');
+      const q = (filterQ||"").trim().toLowerCase();
+      const items = LR.filter(x=>{
+        const matchQ = !q || (x.id.toLowerCase().includes(q) || x.codename.toLowerCase().includes(q));
+        const matchS = !filterStatus || x.status.toLowerCase() === filterStatus.toLowerCase();
+        return matchQ && matchS;
       });
       if(items.length===0){
         root.innerHTML = `<div class="muted" style="padding:10px;">No matches.</div>`;
         return;
       }
       root.innerHTML = items.map(x=>`
-        <article class="lr-card" data-id="${x.id}" tabindex="0" role="button" aria-label="${x.number}: ${x.codename}">
-          <span class="chip">${x.number}</span>
+        <article class="lr">
+          <div class="id">${x.id}</div>
           <h4>${x.codename}</h4>
-          <div class="small" style="margin:6px 0 10px">${x.summary}</div>
-          <div class="badge ${x.zone.toLowerCase()}">${x.zone}</div>
-          <span class="badge" style="margin-left:6px;">${x.status}</span>
+          <span class="status ${statusClass(x.status)}">${x.status}</span>
+          <a class="open" href="${x.href}" aria-label="Open ${x.id} page">Open File →</a>
         </article>
       `).join('');
-      // Bind open modal
-      root.querySelectorAll('.lr-card').forEach(card=>{
-        card.addEventListener('click', ()=>{
-          const id = card.getAttribute('data-id');
-          openModalFor(id);
-        });
-        card.addEventListener('keypress', (e)=>{
-          if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); card.click(); }
-        });
+    }
+
+    function setActive(hash){
+      $$(".nav a").forEach(a=>{
+        a.classList.toggle('active', a.getAttribute('href') === hash);
       });
     }
 
-    function openModalFor(id){
-      const entry = LR_DATA.find(x=>x.id===id);
-      if(!entry) return;
-      $('#modalTitle').textContent = `${entry.number} — ${entry.codename}`;
-      $('#modalBody').innerHTML = entry.details;
-      $('#lrModal').classList.add('open');
-      $('#lrModal').setAttribute('aria-hidden','false');
-    }
-    function closeModal(){
-      $('#lrModal').classList.remove('open');
-      $('#lrModal').setAttribute('aria-hidden','true');
-    }
-
-    // Initial render
-    function render(){
-      renderKpis();
-      const hash = location.hash || '#/home';
-      setActiveNav(hash);
-      const main = $('#app');
-
-      // Routes
-      if(hash.startsWith('#/home')){
-        main.innerHTML = pageHome();
-        renderLRList('lrList', '');
-        bindSearch();
-      } else if(hash.startsWith('#/anomalies')){
-        main.innerHTML = pageAnomalies();
-        renderLRList('lrList', '');
-        bindSearch();
-      } else if(hash.startsWith('#/docs/')){
-        const id = hash.split('/')[2];
-        main.innerHTML = pageDoc(id);
-      } else if(hash.startsWith('#/about')){
-        main.innerHTML = pageAbout();
+    function route(){
+      const hash = location.hash || "#/";
+      setActive(hash);
+      const app = $("#app");
+      if(hash === "#/" ){
+        app.innerHTML = pageHome();
+      } else if(hash === "#/anomalies"){
+        app.innerHTML = pageAnomalies();
+      } else if(hash === "#/notes"){
+        app.innerHTML = pageNotes();
+      } else if(hash === "#/about"){
+        app.innerHTML = pageAbout();
       } else {
-        location.hash = '#/home';
+        location.hash = "#/";
+        return;
+      }
+      // bind controls for current page
+      const q = $("#q");
+      const s = $("#status");
+      if(q && s){
+        renderList("", "");
+        q.addEventListener("input", ()=> renderList(q.value, s.value));
+        s.addEventListener("change", ()=> renderList(q.value, s.value));
+      }
+      const quick = $("#quickAll");
+      if(quick){
+        quick.addEventListener("click", ()=>{
+          location.hash = "#/anomalies";
+        });
       }
     }
 
-    function bindSearch(){
-      const input = $('#search');
-      if(!input) return;
-      input.addEventListener('input', (e)=>{
-        renderLRList('lrList', e.target.value);
-      });
-    }
-
     // Events
-    window.addEventListener('hashchange', render);
-    document.getElementById('themeToggle').addEventListener('click', ()=>setTheme());
-    document.getElementById('modalClose').addEventListener('click', closeModal);
-    document.getElementById('lrModal').addEventListener('click', (e)=>{ if(e.target.id==='lrModal') closeModal(); });
+    window.addEventListener('hashchange', route);
+    document.getElementById('theme').addEventListener('click', ()=>setTheme());
 
-    // Keyboard: Escape closes modal
-    window.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeModal(); });
-
-    // Kick off
-    render();
+    // Go
+    route();
   </script>
 </body>
 </html>
