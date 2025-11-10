@@ -3,153 +3,474 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Laboratory Calculator</title>
+  <title>The Laboratory — Index</title>
+  <meta name="description" content="The Laboratory archive index built by Min." />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 
   <style>
     :root{
-      --bg:#0e0f12;
-      --panel:#15181d;
-      --ink:#e7e9ed;
+      /* Min's monochrome palette with subtle hazard accents */
+      --bg: #0e0f12;
+      --panel: #121418;
+      --panel-2:#15181d;
+      --ink: #e7e9ed;
       --muted:#8c96a3;
-      --line:rgba(255,255,255,0.08);
-      --accent:#e6b422;
-      --shadow:0 10px 30px rgba(0,0,0,.35);
-      --r-lg:16px;
+      --line: rgba(255,255,255,0.08);
+      --accent:#e6b422;   /* amber hazard note */
+      --accent-2:#6ee7b7; /* mint ok */
+      --danger:#ef4444;   /* red */
+      --warn:#f59e0b;     /* yellow amber */
+      --black:#aeb4bf;    /* for black class chip text */
+      --card:#14171c;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --r-lg: 16px;
+      --r-md: 12px;
+      --r-sm: 10px;
+      --ring: 0 0 0 2px rgba(230,180,34,.18);
     }
-    body{margin:0;font-family:Inter;background:var(--bg);color:var(--ink);}    
-    header{display:flex;justify-content:space-between;align-items:center;padding:14px;background:var(--panel);border-bottom:1px solid var(--line);}    
-    .btn{padding:8px 12px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--ink);text-decoration:none;font-weight:600;cursor:pointer;}    
-    .container{max-width:900px;margin:20px auto;padding:20px;}    
-    .calc-box{display:grid;grid-template-columns:1fr 260px;gap:20px;}    
-    .screen{background:#000;border:1px solid var(--line);border-radius:10px;padding:16px;font-size:32px;word-break:break-all;min-height:60px;}    
-    .keys{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:14px;}    
-    .key{padding:14px;background:var(--panel);border:1px solid var(--line);border-radius:10px;text-align:center;font-size:18px;cursor:pointer;user-select:none;}    
-    .key:active{transform:scale(.97);}    
-    .history{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px;height:500px;overflow:auto;}    
-    .hist-item{padding:6px 4px;border-bottom:1px solid var(--line);cursor:pointer;}    
-    .hist-item:hover{background:rgba(255,255,255,.06);}    
+    [data-theme="light"]{
+      --bg:#f6f7fb;
+      --panel:#ffffff;
+      --panel-2:#eef1f6;
+      --ink:#0f141a;
+      --muted:#5b6574;
+      --line: rgba(0,0,0,0.08);
+      --accent:#b08900;
+      --accent-2:#118f6b;
+      --danger:#b91c1c;
+      --warn:#a16207;
+      --black:#374151;
+      --card:#ffffff;
+      --shadow: 0 10px 30px rgba(0,0,0,.08);
+      --ring: 0 0 0 2px rgba(176,137,0,.18);
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
+      background:
+        radial-gradient(1200px 800px at 85% -10%, rgba(230,180,34,.06), transparent 60%),
+        radial-gradient(1200px 900px at -10% 90%, rgba(110,231,183,.05), transparent 60%),
+        var(--bg);
+      color:var(--ink);
+    }
+
+    .layout{
+      display:grid;
+      grid-template-columns: 280px 1fr;
+      grid-template-rows: 64px calc(100dvh - 64px);
+      min-height:100dvh;
+    }
+    header{
+      grid-column: 1/3;
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      padding:10px 16px; background: var(--panel-2);
+      border-bottom:1px solid var(--line); position:sticky; top:0; z-index:20;
+    }
+    .brand{display:flex; align-items:center; gap:12px;}
+    .mark{
+      width:36px; height:36px; border-radius:10px;
+      background:
+        conic-gradient(from 180deg, #20242b, #1a1f27, #2a2f38);
+      border:1px solid var(--line);
+      position:relative;
+    }
+    .mark:after{
+      content:""; position:absolute; inset:7px; border-radius:6px;
+      border:2px solid var(--accent); transform: rotate(8deg);
+      opacity:.85;
+    }
+    .brand h1{
+      margin:0; font-size:16px; letter-spacing:.12em; text-transform:uppercase; font-weight:800;
+    }
+
+    .btn{
+      border:1px solid var(--line); background:var(--panel); color:var(--ink);
+      border-radius:10px; padding:8px 12px; font-weight:600; cursor:pointer; transition:.18s;
+    }
+    .btn:hover{ transform: translateY(-1px); }
+    .btn:active{ transform: translateY(0); }
+    .btn.ghost{ background:transparent; }
+    .btn.primary{ border-color: rgba(230,180,34,.35); box-shadow: var(--shadow); }
+    .btn.inline-link{ display:inline-flex; align-items:center; gap:8px; text-decoration:none; }
+
+    aside{
+      border-right:1px solid var(--line); background:var(--panel);
+      padding:14px; position:sticky; top:64px; height: calc(100dvh - 64px); overflow:auto;
+    }
+    nav .label{
+      font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--muted);
+      margin:12px 8px 8px;
+    }
+    .nav{ list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:6px; }
+    .nav a{
+      display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--ink);
+      padding:10px 12px; border-radius:10px; border:1px solid transparent;
+    }
+    .nav a:hover{ background:rgba(255,255,255,.03); border-color: var(--line); }
+    .nav a.active{ background:linear-gradient(180deg, rgba(230,180,34,.12), rgba(230,180,34,.05)); border-color: rgba(230,180,34,.35); }
+
+    main{ padding:18px; overflow:auto; }
+
+    .hero{
+      display:grid; grid-template-columns: 1.15fr 1fr; gap:14px; margin-bottom:14px;
+    }
+    .card{
+      background:var(--card); border:1px solid var(--line); border-radius: var(--r-lg);
+      padding:18px; box-shadow: var(--shadow);
+    }
+    .hero h2{ margin:0 0 6px 0; font-size:26px; }
+    .muted{ color:var(--muted); }
+
+    .bar{
+      display:flex; gap:10px; align-items:center; margin-top:8px; flex-wrap:wrap;
+    }
+    .chip{
+      padding:6px 10px; border-radius:999px; border:1px solid var(--line); font-weight:700; font-size:11px; color:var(--muted);
+    }
+
+    .controls{
+      display:flex; gap:10px; flex-wrap:wrap; margin:10px 0 0;
+    }
+    .search{
+      display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:10px;
+      background:var(--panel); border:1px solid var(--line); min-width:220px;
+    }
+    .search input{ flex:1; background:transparent; border:none; outline:none; color:var(--ink); }
+    .select{
+      background:var(--panel); border:1px solid var(--line); color:var(--ink);
+      border-radius:10px; padding:10px 12px;
+    }
+
+    .grid{ display:grid; grid-template-columns: repeat(12, minmax(0,1fr)); gap:12px; }
+    .col-12{ grid-column: span 12; }
+
+    .lr-list{
+      display:grid; grid-template-columns: repeat( auto-fill, minmax(220px,1fr) ); gap:12px;
+      margin-top:10px;
+    }
+    .lr{
+      padding:14px; border-radius:14px; border:1px solid var(--line); background:var(--panel-2);
+      position:relative; transition:.18s; display:flex; flex-direction:column; gap:8px;
+    }
+    .lr:hover{ transform: translateY(-2px); box-shadow: var(--shadow); }
+    .lr h4{ margin:0; font-size:16px; letter-spacing:.3px; }
+    .lr .id{ font-size:12px; color:var(--muted); letter-spacing:.1em; text-transform:uppercase; }
+    .lr .status{
+      display:inline-flex; align-items:center; gap:8px; font-size:11px; font-weight:800; letter-spacing:.06em;
+      padding:6px 8px; border-radius:999px; width:max-content; border:1px solid var(--line);
+    }
+    .s-yellow{ background: rgba(245,158,11,.12); color:#ffd482; border-color: rgba(245,158,11,.35); }
+    .s-red{ background: rgba(239,68,68,.12); color:#ff9aa0; border-color: rgba(239,68,68,.35); }
+    .s-black{ background: rgba(148,163,184,.12); color:#cfd5de; border-color: rgba(148,163,184,.35); }
+    .s-neutral{ background: rgba(107,114,128,.12); color:#c6cbd3; border-color: rgba(107,114,128,.35); }
+    .s-undef{ background: rgba(255,255,255,.06); color:var(--muted); border-color: var(--line); }
+
+    .lr .open{
+      margin-top:auto;
+      display:inline-flex; align-items:center; justify-content:center; gap:8px;
+      padding:10px 12px; border:1px solid var(--line); border-radius:10px; color:var(--ink);
+      text-decoration:none; background:linear-gradient(180deg, rgba(255,255,255,.02), transparent);
+      font-weight:700;
+    }
+    .lr .open:hover{ box-shadow: var(--shadow); border-color: rgba(230,180,34,.35); }
+
+    .footer{
+      margin-top:14px; padding:12px; border-top:1px solid var(--line); color:var(--muted); font-size:13px;
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+    }
+
+    @media (max-width: 980px){
+      .layout{ grid-template-columns: 1fr; grid-template-rows: auto auto 1fr; }
+      aside{ position:static; height:auto; border-right:none; border-bottom:1px solid var(--line); }
+      .hero{ grid-template-columns: 1fr; }
+    }
   </style>
 </head>
-<body>
-<header>
-  <a class="btn" href="laboratory.html">↩ Return to Index</a>
-  <button class="btn" id="theme">🌗 Theme</button>
-</header>
-
-<div class="container">
-  <div class="calc-box">
-
-    <!-- LEFT: Calculator -->
-    <div>
-      <div class="screen" id="display">0</div>
-
-      <div class="keys" id="keys">
-        <!-- Row 1 -->
-        <div class="key" data-k="AC">AC</div>
-        <div class="key" data-k="DEL">⌫</div>
-        <div class="key" data-k="(">(</div>
-        <div class="key" data-k=")">)</div>
-        <div class="key" data-k="^">xʸ</div>
-
-        <!-- Row 2 -->
-        <div class="key" data-k="7">7</div>
-        <div class="key" data-k="8">8</div>
-        <div class="key" data-k="9">9</div>
-        <div class="key" data-k="/">÷</div>
-        <div class="key" data-k="sqrt">√</div>
-
-        <!-- Row 3 -->
-        <div class="key" data-k="4">4</div>
-        <div class="key" data-k="5">5</div>
-        <div class="key" data-k="6">6</div>
-        <div class="key" data-k="*">×</div>
-        <div class="key" data-k="log">log</div>
-
-        <!-- Row 4 -->
-        <div class="key" data-k="1">1</div>
-        <div class="key" data-k="2">2</div>
-        <div class="key" data-k="3">3</div>
-        <div class="key" data-k="-">−</div>
-        <div class="key" data-k="ln">ln</div>
-
-        <!-- Row 5 -->
-        <div class="key" data-k="0">0</div>
-        <div class="key" data-k=".">.</div>
-        <div class="key" data-k="pi">π</div>
-        <div class="key" data-k="+">+</div>
-        <div class="key" data-k="=">=</div>
+<body data-theme="dark">
+  <div class="layout">
+    <header>
+      <div class="brand">
+        <div class="mark" aria-hidden="true"></div>
+        <h1>The Laboratory — Index</h1>
       </div>
-    </div>
+      <div style="display:flex; gap:8px; align-items:center;">
+        <button class="btn ghost" id="theme" aria-label="Toggle theme">🌗 Theme</button>
+        <!-- Calculator button next to Theme -->
+        <a class="btn inline-link" id="calcBtn" href="calculator.html" aria-label="Open Laboratory Calculator">🧮 Calculator</a>
+        <a class="btn primary inline-link" href="https://github.com/" target="_blank" rel="noreferrer noopener">GitHub</a>
+      </div>
+    </header>
 
-    <!-- RIGHT: History -->
-    <div>
-      <div class="history" id="history"></div>
-    </div>
+    <aside>
+      <nav>
+        <div class="label">Navigation</div>
+        <ul class="nav">
+          <li><a href="#/" class="active">Home</a></li>
+          <li><a href="#/anomalies">Anomaly Index</a></li>
+          <li><a href="#/notes">Notes</a></li>
+          <li><a href="#/about">About</a></li>
+        </ul>
+
+        <div class="label">Status Legend</div>
+        <div class="bar">
+          <span class="chip s-yellow">Yellow</span>
+          <span class="chip s-red">Red</span>
+          <span class="chip s-black">Black</span>
+          <span class="chip s-neutral">Neutralized</span>
+          <span class="chip s-undef">Undefined</span>
+        </div>
+
+        <div class="label">Built by</div>
+        <div class="chip">Min Kuznetzov (Intern)</div>
+      </nav>
+    </aside>
+
+    <main id="app"></main>
   </div>
-</div>
 
-<script>
-  document.addEventListener("DOMContentLoaded",()=>{
-
-    const disp = document.getElementById("display");
-    const hist = document.getElementById("history");
-    let expr = "";
-
-    function update(){ disp.textContent = expr || "0"; }
-    function append(x){ expr += x; update(); }
-    function addHistory(q,a){
-      const div=document.createElement("div");
-      div.className="hist-item";
-      div.textContent = q + " = " + a;
-      div.onclick=()=>{expr=a;update();};
-      hist.prepend(div);
-    }
-
-    function evaluate(){
-      try{
-        let e = expr
-          .replace(/π/g,"Math.PI")
-          .replace(/sqrt/g,"Math.sqrt")
-          .replace(/log/g,"Math.log10")
-          .replace(/ln/g,"Math.log");
-        const ans = Function("return ("+e+")")();
-        addHistory(expr,ans);
-        expr = String(ans);
-        update();
-      }catch{
-        expr = "Error";
-        update();
-        expr = "";
-      }
-    }
-
-    document.querySelectorAll(".key").forEach(k=>{
-      k.onclick=()=>{
-        const v = k.dataset.k;
-        if(v=="AC"){expr="";update();return;}
-        if(v=="DEL"){expr=expr.slice(0,-1);update();return;}
-        if(v=="="){evaluate();return;}
-        if(v=="pi"){append("π");return;}
-        if(v=="sqrt"){append("sqrt(");return;}
-        if(v=="log"){append("log(");return;}
-        if(v=="ln"){append("ln(");return;}
-        append(v);
-      }
-    });
-
-    // theme
-    const saved = localStorage.getItem('labTheme');
-    if(saved) document.body.dataset.theme = saved;
-    document.getElementById('theme').onclick=()=>{
-      const next = document.body.dataset.theme === 'light' ? 'dark' : 'light';
-      document.body.dataset.theme = next;
-      localStorage.setItem('labTheme',next);
+  <script>
+    // ---------- DATA (Minimal: index only; each LR opens its own file) ----------
+    // Known entries from your lore; others default to Undefined.
+    const KNOWN = {
+      "LR-001": { codename: "Serial Killer", status: "Red" },
+      "LR-002": { codename: "Wau Tak Jadi", status: "Yellow" },
+      "LR-003": { codename: "Orb Thingy", status: "Yellow" },
+      "LR-004": { codename: "Ghost Thingy", status: "Yellow" },
+      "LR-008": { codename: "The Introvert", status: "Yellow" },
+      "LR-015": { codename: "The Floor Is Lava", status: "Black" },
+      "LR-016": { codename: "—", status: "Neutralized" },
+      "LR-017": { codename: "Mother of Tundra", status: "Black" },
+      "LR-018": { codename: "Murderous Rat", status: "Neutralized" }
+      // LR-019 (Rendang Pak Munawer) not added yet → leave Undefined as requested
     };
 
-  });
-</script>
+    // Build 001..030
+    const LR = Array.from({length:30}, (_,i)=>{
+      const n = (i+1).toString().padStart(3,'0');
+      const id = `LR-${n}`;
+      const known = KNOWN[id] || null;
+      return {
+        id,
+        codename: known?.codename || "Undefined",
+        status: known?.status || "Undefined",
+        href: `lr${n}.html`
+      };
+    });
 
+    // ---------- UTIL ----------
+    const $ = s => document.querySelector(s);
+    const $$ = s => Array.from(document.querySelectorAll(s));
+
+    function statusClass(s){
+      switch((s||"").toLowerCase()){
+        case "yellow": return "s-yellow";
+        case "red": return "s-red";
+        case "black": return "s-black";
+        case "neutralized": return "s-neutral";
+        default: return "s-undef";
+      }
+    }
+
+    function setTheme(next){
+      const root = document.body;
+      const curr = root.getAttribute('data-theme') || 'dark';
+      const fin = next || (curr === 'dark' ? 'light' : 'dark');
+      root.setAttribute('data-theme', fin);
+      localStorage.setItem('labTheme', fin);
+    }
+    const saved = localStorage.getItem('labTheme');
+    if(saved) document.body.setAttribute('data-theme', saved);
+
+    // ---------- PAGES ----------
+    function pageHome(){
+      return `
+        <section class="hero">
+          <div class="card">
+            <h2>Laboratory Archive Index</h2>
+            <p class="muted">A simple registry of LR files. Numbers reflect <em>discovery</em>, not strength. Built by Min to reduce confusion.</p>
+            <div class="bar">
+              <span class="chip">No Ethics Board</span>
+              <span class="chip">Test • Observe • Cross-Test</span>
+              <span class="chip">Do Not Sell or Release</span>
+            </div>
+            <div class="controls">
+              <a class="btn" href="#/anomalies">Open Anomaly Index</a>
+              <button class="btn ghost" id="quickAll">Show All (Grid)</button>
+              <a class="btn" href="calculator.html" aria-label="Open Laboratory Calculator from Home">🧮 Calculator</a>
+            </div>
+          </div>
+          <div class="card">
+            <h2 style="margin:0 0 6px 0;">Bulletin</h2>
+            <ul class="muted" style="margin:0 0 6px 18px;">
+              <li>LR-016 listed <strong>Neutralized</strong>. Details unavailable.</li>
+              <li>LR-017 remains <strong>Black</strong>. Door timing enforced.</li>
+              <li>Mirrors deployed east wing (temporary).</li>
+              <li>“Green Zone” removed from classification. Boring.</li>
+            </ul>
+            <div class="bar" style="margin-top:8px;">
+              <span class="chip">Clerk: Min</span>
+              <span class="chip">Mercenary: Mia</span>
+            </div>
+          </div>
+        </section>
+        <section class="card">
+          <div class="controls">
+            <div class="search" style="flex:1">
+              <span>🔎</span>
+              <input id="q" placeholder="Search LR number or codename…" />
+            </div>
+            <select id="status" class="select" aria-label="Filter by status">
+              <option value="">All Status</option>
+              <option>Yellow</option>
+              <option>Red</option>
+              <option>Black</option>
+              <option>Neutralized</option>
+              <option>Undefined</option>
+            </select>
+          </div>
+          <div id="grid" class="lr-list"></div>
+        </section>
+        <div class="footer">
+          <span>© The Laboratory • Founders: Light & Ton</span>
+          <span>Built by Min. If broken, it wasn’t me.</span>
+        </div>
+      `;
+    }
+
+    function pageAnomalies(){
+      return `
+        <section class="card">
+          <h2 style="margin:0 0 8px 0;">Anomaly Index</h2>
+          <p class="muted">Select a file to open its dedicated page <code>(lr001.html … lr030.html)</code>.</p>
+          <div class="controls">
+            <div class="search" style="flex:1">
+              <span>🔎</span>
+              <input id="q" placeholder="Search LR number or codename…" />
+            </div>
+            <select id="status" class="select" aria-label="Filter by status">
+              <option value="">All Status</option>
+              <option>Yellow</option>
+              <option>Red</option>
+              <option>Black</option>
+              <option>Neutralized</option>
+              <option>Undefined</option>
+            </select>
+          </div>
+          <div id="grid" class="lr-list"></div>
+        </section>
+        <div class="footer">
+          <span>Yellow = won’t kill you (until you do something). Red = will kill you. Black = might end everything.</span>
+          <span>Neutralized = removed. Undefined = not filed yet.</span>
+        </div>
+      `;
+    }
+
+    function pageNotes(){
+      return `
+        <section class="card">
+          <h2 style="margin:0 0 6px 0;">Notes</h2>
+          <ul class="muted" style="margin:0 0 6px 18px;">
+            <li>This page does not include anomaly content. Each LR has its own HTML file.</li>
+            <li>If a page isn’t ready yet, the index still links it (Undefined).</li>
+            <li>Min will fill content when the Founders stop yelling.</li>
+          </ul>
+        </section>
+      `;
+    }
+
+    function pageAbout(){
+      return `
+        <section class="card">
+          <h2 style="margin:0 0 6px 0;">About</h2>
+          <p><strong>The Laboratory</strong> is a Roblox project by the Founders <em>Light</em> & <em>Ton</em>. It plays like an internal testing facility where anomalies (tagged as <code>LR-###</code>) are discovered, catalogued, and stress-tested. This website is the in-universe archive that mirrors what players see and use in-game.</p>
+          <ul>
+            <li><strong>Goal:</strong> Test, observe, and cross-test anomalies. There’s no Ethics Board—only results.</li>
+            <li><strong>Files & Codenames:</strong> Each anomaly owns a dedicated page (e.g., <code>lr001.html</code>) with procedures, notes, and cross-tests. The index here lists <em>discovery order</em>, not strength.</li>
+            <li><strong>Status System:</strong> <em>Yellow</em> (conditionally safe), <em>Red</em> (lethal), <em>Black</em> (existential), <em>Neutralized</em> (removed), <em>Undefined</em> (placeholder, not written yet).</li>
+            <li><strong>Roles (lore):</strong> Clerk <em>Min</em> maintains records; Mercenary <em>Mia</em> handles field work.</li>
+            <li><strong>Gameplay Loop:</strong> Discover → Contain → Document → Cross-test. Doors, timing, and environment setups matter (e.g., LR-017 door timing).</li>
+            <li><strong>Scope:</strong> Current public registry spans <code>LR-001</code> to <code>LR-030</code>. Some are blank on purpose to leave space for future updates.</li>
+          </ul>
+          <p class="muted">This index was assembled by Min Kuznetzov. Do not sell or release anomalies. Use the Calculator for quick in-run math (damage, timers, door cycles).</p>
+          <div class="controls">
+            <a class="btn" href="calculator.html" aria-label="Open Laboratory Calculator from About">🧮 Open Calculator</a>
+            <a class="btn" href="#/anomalies">Browse LR Files</a>
+          </div>
+        </section>
+      `;
+    }
+
+    // ---------- RENDER ----------
+    function renderList(filterQ="", filterStatus=""){
+      const root = $('#grid');
+      const q = (filterQ||"").trim().toLowerCase();
+      const items = LR.filter(x=>{
+        const matchQ = !q || (x.id.toLowerCase().includes(q) || x.codename.toLowerCase().includes(q));
+        const matchS = !filterStatus || x.status.toLowerCase() === filterStatus.toLowerCase();
+        return matchQ && matchS;
+      });
+      if(items.length===0){
+        root.innerHTML = `<div class="muted" style="padding:10px;">No matches.</div>`;
+        return;
+      }
+      root.innerHTML = items.map(x=>`
+        <article class="lr">
+          <div class="id">${x.id}</div>
+          <h4>${x.codename}</h4>
+          <span class="status ${statusClass(x.status)}">${x.status}</span>
+          <a class="open" href="${x.href}" aria-label="Open ${x.id} page">Open File →</a>
+        </article>
+      `).join('');
+    }
+
+    function setActive(hash){
+      $$(".nav a").forEach(a=>{
+        a.classList.toggle('active', a.getAttribute('href') === hash);
+      });
+    }
+
+    function route(){
+      const hash = location.hash || "#/";
+      setActive(hash);
+      const app = $("#app");
+      if(hash === "#/" ){
+        app.innerHTML = pageHome();
+      } else if(hash === "#/anomalies"){
+        app.innerHTML = pageAnomalies();
+      } else if(hash === "#/notes"){
+        app.innerHTML = pageNotes();
+      } else if(hash === "#/about"){
+        app.innerHTML = pageAbout();
+      } else {
+        location.hash = "#/";
+        return;
+      }
+      // bind controls for current page
+      const q = $("#q");
+      const s = $("#status");
+      if(q && s){
+        renderList("", "");
+        q.addEventListener("input", ()=> renderList(q.value, s.value));
+        s.addEventListener("change", ()=> renderList(q.value, s.value));
+      }
+      const quick = $("#quickAll");
+      if(quick){
+        quick.addEventListener("click", ()=>{
+          location.hash = "#/anomalies";
+        });
+      }
+    }
+
+    // Events
+    window.addEventListener('hashchange', route);
+    document.getElementById('theme').addEventListener('click', ()=>setTheme());
+
+    // Go
+    route();
+  </script>
 </body>
 </html>
