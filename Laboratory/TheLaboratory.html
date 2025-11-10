@@ -95,6 +95,7 @@
     .btn:active{ transform: translateY(0); }
     .btn.ghost{ background:transparent; }
     .btn.primary{ border-color: rgba(230,180,34,.35); box-shadow: var(--shadow); }
+    .btn.inline-link{ display:inline-flex; align-items:center; gap:8px; text-decoration:none; }
 
     aside{
       border-right:1px solid var(--line); background:var(--panel);
@@ -197,8 +198,10 @@
         <h1>The Laboratory — Index</h1>
       </div>
       <div style="display:flex; gap:8px; align-items:center;">
-        <button class="btn ghost" id="theme">🌗 Theme</button>
-        <a class="btn primary" href="https://github.com/" target="_blank" rel="noreferrer">GitHub</a>
+        <button class="btn ghost" id="theme" aria-label="Toggle theme">🌗 Theme</button>
+        <!-- NEW: Calculator button next to Theme -->
+        <a class="btn inline-link" id="calcBtn" href="calculator.html" aria-label="Open Laboratory Calculator">🧮 Calculator</a>
+        <a class="btn primary inline-link" href="https://github.com/" target="_blank" rel="noreferrer noopener">GitHub</a>
       </div>
     </header>
 
@@ -297,6 +300,7 @@
             <div class="controls">
               <a class="btn" href="#/anomalies">Open Anomaly Index</a>
               <button class="btn ghost" id="quickAll">Show All (Grid)</button>
+              <a class="btn" href="calculator.html" aria-label="Open Laboratory Calculator from Home">🧮 Calculator</a>
             </div>
           </div>
           <div class="card">
@@ -382,15 +386,20 @@
       return `
         <section class="card">
           <h2 style="margin:0 0 6px 0;">About</h2>
-          <p>The Laboratory exists to test, not to protect. All anomalies are property of the Founders. Do not sell or release them.</p>
+          <p><strong>The Laboratory</strong> is a Roblox project by the Founders <em>Light</em> & <em>Ton</em>. It plays like an internal testing facility where anomalies (tagged as <code>LR-###</code>) are discovered, catalogued, and stress-tested. This website is the in-universe archive that mirrors what players see and use in-game.</p>
           <ul>
-            <li><strong>Yellow:</strong> Won’t kill you… unless you do something stupid.</li>
-            <li><strong>Red:</strong> Will kill you.</li>
-            <li><strong>Black:</strong> Might kill the world.</li>
-            <li><strong>Neutralized:</strong> Removed from circulation.</li>
-            <li><strong>Undefined:</strong> Placeholder entry; page not written yet.</li>
+            <li><strong>Goal:</strong> Test, observe, and cross-test anomalies. There’s no Ethics Board—only results.</li>
+            <li><strong>Files & Codenames:</strong> Each anomaly owns a dedicated page (e.g., <code>lr001.html</code>) with procedures, notes, and cross-tests. The index here lists <em>discovery order</em>, not strength.</li>
+            <li><strong>Status System:</strong> <em>Yellow</em> (conditionally safe), <em>Red</em> (lethal), <em>Black</em> (existential), <em>Neutralized</em> (removed), <em>Undefined</em> (placeholder, not written yet).</li>
+            <li><strong>Roles (lore):</strong> Clerk <em>Min</em> maintains records; Mercenary <em>Mia</em> handles field work.</li>
+            <li><strong>Gameplay Loop:</strong> Discover → Contain → Document → Cross-test. Doors, timing, and environment setups matter (e.g., LR-017 door timing).</li>
+            <li><strong>Scope:</strong> Current public registry spans <code>LR-001</code> to <code>LR-030</code>. Some are blank on purpose to leave space for future updates.</li>
           </ul>
-          <p class="muted">This index was assembled by Min Kuznetzov.</p>
+          <p class="muted">This index was assembled by Min Kuznetzov. Do not sell or release anomalies. Use the Calculator for quick in-run math (damage, timers, door cycles).</p>
+          <div class="controls">
+            <a class="btn" href="calculator.html" aria-label="Open Laboratory Calculator from About">🧮 Open Calculator</a>
+            <a class="btn" href="#/anomalies">Browse LR Files</a>
+          </div>
         </section>
       `;
     }
