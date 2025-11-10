@@ -1,1 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DeerMouse — Home</title>
+  <meta name="description" content="DeerMouse — a duo of creators experimenting with games, websites, and ideas." />
 
+  <style>
+    /* --------- THEME --------- */
+    :root{
+      --bg:#07090d;
+      --bg2:#0a0f16;
+      --card:#0f1420;
+      --stroke:#1b2636;
+      --text:#e8edf6;
+      --muted:#a8b3c7;
+      --accent:#57a6ff;
+      --accent-2:#8ef6ff;
+      --glow: 0 0 20px rgba(87,166,255,.35), 0 0 60px rgba(87,166,255,.18);
+      --radius:18px;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ margin:0; padding:0; background:var(--bg); color:var(--text); font-family: Inter, "Segoe UI", Roboto, system-ui, -apple-system, sans-serif; }
+
+    a{ color:var(--accent); text-decoration:none; }
+    a:hover{ text-decoration:underline; }
+
+    /* --------- HEADER --------- */
+    .site-header{
+      position:sticky; top:0; z-index:50;
+      background:linear-gradient(180deg, rgba(7,9,13,.85), rgba(7,9,13,.55));
+      backdrop-filter: blur(8px) saturate(120%);
+      border-bottom:1px solid var(--stroke);
+    }
+    .header-inner{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:10px 16px; max-width:1100px; margin:0 auto;
+    }
+    .brand{ display:flex; align-items:center; gap:10px; font-weight:800; letter-spacing:.3px; }
+    .mark{ width:28px; height:28px; display:grid; place-items:center; border-radius:10px; border:1px solid var(--stroke); background: radial-gradient(60% 60% at 50% 40%, rgba(87,166,255,.45), transparent 65%), #0a1018; box-shadow: var(--glow); }
+    .nav{ display:flex; gap:12px; }
+    .nav a{ padding:8px 10px; border-radius:12px; }
+    .nav a:hover{ background:var(--stroke); text-decoration:none; }
+
+    /* --------- HERO --------- */
+    .hero{
+      position:relative; overflow:hidden;
+      border-bottom:1px solid var(--stroke);
+      background:
+        radial-gradient(1200px 500px at 80% -10%, rgba(87,166,255,.18), transparent 60%),
+        radial-gradient(900px 400px at 10% 10%, rgba(142,246,255,.10), transparent 60%),
+        linear-gradient(180deg, var(--bg), var(--bg2));
+    }
+    .hero-inner{
+      max-width:1100px; margin:0 auto; padding:72px 16px 48px;
+      display:grid; grid-template-columns: 1.2fr .8fr; gap:24px;
+    }
+    .hero h1{
+      font-size: clamp(36px, 7vw, 72px);
+      line-height: 1.02; margin:0 0 10px;
+      color:var(--text); text-shadow: var(--glow);
+    }
+    .hero p{ color:var(--muted); font-size: clamp(16px, 2.5vw, 18px); margin:10px 0 22px; }
+    .cta{ display:inline-flex; align-items:center; gap:10px; padding:12px 18px; border-radius:14px;
+      border:1px solid var(--accent); color:var(--text); text-decoration:none;
+      box-shadow: var(--glow);
+    }
+    .cta:hover{ background:rgba(87,166,255,.08); text-decoration:none; }
+
+    /* Decorative art */
+    .hero-art{
+      position:relative; display:grid; place-items:center;
+    }
+    .blob{
+      width:min(80vw,520px); filter: drop-shadow(0 0 35px rgba(87,166,255,.25));
+      opacity:.95;
+    }
+
+    /* --------- CARDS / SECTIONS --------- */
+    .section{ max-width:1100px; margin:0 auto; padding:28px 16px 60px; }
+    .grid{
+      display:grid; gap:16px;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    }
+    .card{
+      background: linear-gradient(180deg, rgba(15,20,32,.7), rgba(10,15,24,.8));
+      border:1px solid var(--stroke); border-radius:var(--radius); padding:16px;
+    }
+    .card h3{ margin:6px 0 8px; font-size:20px; }
+    .card p{ margin:0; color:var(--muted); }
+
+    /* --------- FOOTER --------- */
+    .site-footer{
+      border-top:1px solid var(--stroke);
+      color:var(--muted); text-align:center; padding:16px;
+    }
+
+    /* --------- UTIL --------- */
+    .muted{ color:var(--muted); }
+    .center{ text-align:center; }
+    .pill{ display:inline-block; padding:6px 10px; border:1px solid var(--stroke); border-radius:999px; background:rgba(255,255,255,.02); }
+
+    @media (max-width: 800px){
+      .hero-inner{ grid-template-columns: 1fr; padding-top:56px; }
+      .nav{ display:none; }
+    }
+
+    @media (prefers-reduced-motion: no-preference){
+      .floaty{ animation: floaty 6s ease-in-out infinite; }
+      @keyframes floaty{
+        0%,100{ transform: translateY(0) }
+        50%{ transform: translateY(-8px) }
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="brand">
+        <div class="mark">🦌🧀</div>
+        <span>DeerMouse</span>
+      </div>
+      <nav class="nav">
+        <a href="#about">About</a>
+        <a href="#projects">Projects</a>
+        <a href="#members">Members</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div>
+        <h1>DeerMouse</h1>
+        <p>
+          Created by <strong>Lightragon</strong> & <strong>Ton_Cheese</strong> —  
+          a two-person team exploring websites, Roblox systems, and bigger future ideas.
+        </p>
+        <a class="cta" href="#projects">View Projects →</a>
+        <span class="pill" style="margin-left:10px;">est. 2025</span>
+      </div>
+
+      <div class="hero-art">
+        <svg class="blob floaty" viewBox="0 0 600 600">
+          <defs>
+            <radialGradient id="g1" cx="50%" cy="40%" r="60%">
+              <stop offset="0%" stop-color="#57a6ff"/>
+              <stop offset="100%" stop-color="#57a6ff" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+          <circle cx="300" cy="300" r="240" fill="url(#g1)"/>
+          <path d="M300 200c-70 0-120 45-120 105 0 60 45 115 120 115s120-55 120-115c0-60-50-105-120-105z" fill="#a9d2ff" opacity=".9"/>
+          <circle cx="245" cy="245" r="26" fill="#cfe5ff"/>
+          <circle cx="355" cy="245" r="26" fill="#cfe5ff"/>
+          <path d="M280 182c-8-22-24-40-44-50-7-4-6-10 2-9 19 3 37 17 48 37 10-17 27-31 46-37 8-2 10 3 3 8-20 13-34 33-38 54" fill="#cfe5ff" opacity=".9"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section id="about" class="section">
+    <h2 class="center" style="margin:0 0 8px; font-size: clamp(22px, 4.2vw, 34px); text-shadow: var(--glow);">Who We Are</h2>
+    <p class="center muted" style="margin:0 0 22px;">
+      Two friends with diplomas in <strong>Biomedical Electronic Engineering ICT</strong>.  
+      One group. Many dreams.
+    </p>
+    <div class="grid">
+      <div class="card">
+        <h3>Our Focus</h3>
+        <p>Roblox development, websites, UI/UX, and small useful tools.</p>
+      </div>
+      <div class="card">
+        <h3>Our Style</h3>
+        <p>Dark themes, glow, clean layout, readable design — simple but beautiful.</p>
+      </div>
+      <div class="card">
+        <h3>Our Direction</h3>
+        <p>Build small now, improve skills, aim for bigger projects in the future.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section id="projects" class="section">
+    <h2 class="center" style="margin:0 0 8px; font-size: clamp(22px, 4.2vw, 34px); text-shadow: var(--glow);">Projects</h2>
+    <p class="center muted" style="margin:0 0 22px;">Our Roblox games and shared experiments.</p>
+
+    <div class="grid">
+
+      <div class="card">
+        <h3>The Laboratory (Roblox)</h3>
+        <p>Experimental mechanics and systems. Our shared prototype playground.</p>
+      </div>
+
+      <div class="card">
+        <h3>Police vs Criminal (Roblox)</h3>
+        <p>City chase, combat, and teamwork mechanics.</p>
+      </div>
+
+      <div class="card">
+        <h3>Lepak Kampung (Roblox)</h3>
+        <p>Relax, explore, and chill in a kampung-style world.</p>
+      </div>
+
+      <div class="card">
+        <h3>Ton’s Lab</h3>
+        <p class="muted">A special sandbox for Ton_Cheese to test freely.</p>
+        <a class="cta" href="tonlab.html" style="margin-top:10px; display:inline-block;">Enter Lab →</a>
+      </div>
+
+      <div class="card">
+        <h3>Future Large Project</h3>
+        <p>After enough experience, we aim to build something big together.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Members -->
+  <section id="members" class="section">
+    <h2 class="center" style="margin:0 0 8px; font-size: clamp(22px, 4.2vw, 34px); text-shadow: var(--glow);">Members</h2>
+    <p class="center muted" style="margin:0 0 22px;">
+      The founding duo of DeerMouse — both educated in <strong>Biomedical Electronic Engineering ICT</strong>.
+    </p>
+    <div class="grid">
+      <div class="card">
+        <h3>Lightragon</h3>
+        <p class="muted">
+          Co-founder. UI/UX, layout, effects, and logical systems.  
+          Loves experimenting with new ideas.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>Ton_Cheese</h3>
+        <p class="muted">
+          Co-founder. Creative direction, gameplay feel, and experiments.  
+          Owner of Ton’s Lab.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" class="section center">
+    <h2 style="margin:0 0 8px; font-size: clamp(22px, 4.2vw, 34px); text-shadow: var(--glow);">Contact Us</h2>
+    <p class="muted" style="margin:0 0 14px;">Our personal links.</p>
+    <p>
+      <a class="cta" href="https://github.com/Lightragon" target="_blank">Lightragon GitHub →</a>
+      <a class="cta" href="https://github.com/Ton-Cheese" style="margin-left:10px;" target="_blank">Ton_Cheese GitHub →</a>
+      <a class="cta" href="https://discord.gg/F3WuhctRyP" style="margin-left:10px;" target="_blank">Discord Server →</a>
+    </p>
+  </section>
+
+  <footer class="site-footer">
+    <p>© <span id="year"></span> DeerMouse — built by Lightragon & Ton_Cheese</p>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
