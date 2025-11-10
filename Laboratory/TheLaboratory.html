@@ -1,1 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>LaboratoryX — Anomaly Index</title>
+<meta name="description" content="LaboratoryX anomaly index and dossier console." />
+
+<style>
+  /* ===== THEME ===== */
+  :root{
+    --bg:#07090d;
+    --bg2:#0a0f16;
+    --panel:#0f1420;
+    --stroke:#1b2636;
+    --text:#e8edf6;
+    --muted:#a8b3c7;
+    --accent:#57a6ff;
+    --accent-2:#8ef6ff;
+    --ok:#3bd381;
+    --warn:#ffd166;
+    --danger:#ff6b6b;
+    --radius:16px;
+    --glow: 0 0 22px rgba(87,166,255,.3), 0 0 80px rgba(87,166,255,.12);
+  }
+  *{ box-sizing:border-box }
+  html,body{ margin:0; padding:0; background:var(--bg); color:var(--text); font-family: Inter, "Segoe UI", Roboto, system-ui, -apple-system, sans-serif; }
+
+  a{ color:var(--accent); text-decoration:none }
+  a:hover{ text-decoration:underline }
+
+  /* ===== SHELL ===== */
+  .topbar{
+    position:sticky; top:0; z-index:50;
+    backdrop-filter: blur(10px) saturate(130%);
+    background: linear-gradient(180deg, rgba(7,9,13,.85), rgba(7,9,13,.55));
+    border-bottom:1px solid var(--stroke);
+  }
+  .topbar-inner{
+    max-width:1100px; margin:0 auto; padding:12px 16px;
+    display:flex; gap:12px; align-items:center; justify-content:space-between;
+  }
+  .brand{ display:flex; align-items:center; gap:12px; font-weight:800; letter-spacing:.3px }
+  .mark{ width:32px; height:32px; display:grid; place-items:center; border-radius:12px; border:1px solid var(--stroke); background: radial-gradient(60% 60% at 50% 40%, rgba(87,166,255,.4), transparent 65%), #0a1018; box-shadow: var(--glow) }
+  .exit{ display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border:1px solid var(--stroke); border-radius:12px; color:var(--text); text-decoration:none; background:rgba(255,255,255,.02) }
+  .exit:hover{ border-color:var(--accent); box-shadow: var(--glow); text-decoration:none }
+
+  .wrap{ max-width:1100px; margin:0 auto; padding:20px 16px 60px }
+
+  /* ===== HERO ===== */
+  .hero{
+    margin-top:16px;
+    background: linear-gradient(180deg, rgba(15,20,32,.7), rgba(10,15,24,.8));
+    border:1px solid var(--stroke); border-radius:var(--radius); padding:20px;
+  }
+  .hero h1{ margin:0 0 6px; font-size: clamp(26px, 5.5vw, 44px); text-shadow: var(--glow) }
+  .hero p{ margin:6px 0 0; color:var(--muted) }
+
+  /* ===== CONTROLS ===== */
+  .controls{
+    margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;
+  }
+  input[type=search], select{
+    padding:10px 12px; border-radius:12px; border:1px solid var(--stroke);
+    background:#0b111b; color:var(--text);
+  }
+  .stats{
+    margin-left:auto; display:flex; align-items:center; gap:10px; color:var(--muted);
+  }
+  .pill{ display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border:1px solid var(--stroke); border-radius:999px; background:rgba(255,255,255,.02); font-size:13px }
+
+  /* ===== GRID ===== */
+  .grid{
+    margin-top:16px;
+    display:grid; gap:12px;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  }
+  .card{
+    position:relative;
+    background: linear-gradient(180deg, rgba(16,21,35,.85), rgba(10,15,24,.85));
+    border:1px solid var(--stroke); border-radius:14px; padding:14px;
+    overflow:hidden;
+  }
+  .card::before{
+    content:""; position:absolute; inset:-40% -40% auto auto; height:180px; width:180px;
+    background: radial-gradient(120px 120px at 70% 30%, rgba(87,166,255,.18), transparent 60%);
+    filter: blur(8px);
+  }
+  .code{ font-weight:800; letter-spacing:.6px }
+  .title{ color:var(--muted); margin:2px 0 10px; font-size:14px }
+  .badges{ display:flex; gap:6px; flex-wrap:wrap; margin-bottom:10px }
+  .badge{ font-size:12px; padding:4px 8px; border-radius:999px; border:1px solid var(--stroke); background:rgba(255,255,255,.02) }
+  .sev-ok{ border-color: rgba(59,211,129,.5); color:#b9ffd8 }
+  .sev-warn{ border-color: rgba(255,209,102,.5); color:#ffe8b0 }
+  .sev-danger{ border-color: rgba(255,107,107,.6); color:#ffc7c7 }
+  .open{
+    display:inline-block; margin-top:6px; padding:10px 12px; border-radius:12px;
+    border:1px solid var(--accent); color:var(--text); text-decoration:none; box-shadow: var(--glow)
+  }
+  .open:hover{ background:rgba(87,166,255,.08); text-decoration:none }
+
+  /* ===== FOOTER ===== */
+  footer{ margin-top:24px; text-align:center; color:var(--muted) }
+
+  @media (prefers-reduced-motion:no-preference){
+    .float{ animation: float 6s ease-in-out infinite }
+    @keyframes float{ 0%,100%{ transform:translateY(0)} 50%{ transform:translateY(-6px)} }
+  }
+</style>
+</head>
+<body>
+
+  <!-- Topbar -->
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <div class="mark">🧪</div>
+        <div>LaboratoryX <span style="color:var(--muted); font-weight:600">/ Anomaly Index</span></div>
+      </div>
+      <!-- If this file is in /Laboratory/, this link is correct. If it's in root, change to href="index.html" -->
+      <a class="exit" href="../index.html" title="Back to DeerMouse Home">← Exit to DeerMouse</a>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <!-- Hero -->
+    <section class="hero">
+      <h1 class="float">Anomaly Dossier Console</h1>
+      <p>
+        Central index for LR-series anomalies. Use the search and filters to locate entries.
+        Links are pre-wired from <strong>LR001</strong> to <strong>LR030</strong>.  
+        Create corresponding files (e.g., <code>lr007.html</code>) in the same folder when you’re ready.
+      </p>
+
+      <div class="controls">
+        <input id="q" type="search" placeholder="Search code or title… (e.g., LR014, containment)" />
+        <select id="severity">
+          <option value="">All severities</option>
+          <option value="ok">Green — Low</option>
+          <option value="warn">Amber — Medium</option>
+          <option value="danger">Red — High</option>
+        </select>
+        <div class="stats">
+          <span class="pill">Total: <strong id="totalCount">30</strong></span>
+          <span class="pill">Visible: <strong id="visibleCount">30</strong></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Grid -->
+    <section class="grid" id="grid">
+      <!-- Cards will be injected by JS -->
+    </section>
+
+    <footer>
+      <p>© <span id="year"></span> DeerMouse — LaboratoryX</p>
+    </footer>
+  </div>
+
+<script>
+  // ===== Data (you can edit titles & tags later) =====
+  // severity: ok | warn | danger
+  const anomalies = Array.from({length:30}, (_,i) => {
+    const n = i+1;
+    const code = "LR" + String(n).padStart(3,"0");
+    // simple rotating severity demo; adjust per item later
+    const sev = (n % 5 === 0) ? "danger" : (n % 2 === 0 ? "warn" : "ok");
+    const titles = {
+      ok:    "Low-risk anomaly",
+      warn:  "Moderate anomaly — review",
+      danger:"High-risk anomaly — containment priority"
+    };
+    const tags = {
+      ok:    ["benign","observed","logged"],
+      warn:  ["monitor","field-team","pending"],
+      danger:["containment","hazard","lockdown"]
+    };
+    return {
+      code,
+      title: titles[sev],
+      severity: sev,
+      tags: tags[sev],
+      href: `lr${String(n).padStart(3,"0")}.html` // prewired URL (same folder)
+    };
+  });
+
+  // ===== DOM helpers =====
+  const grid = document.getElementById('grid');
+  const q = document.getElementById('q');
+  const severity = document.getElementById('severity');
+  const totalCount = document.getElementById('totalCount');
+  const visibleCount = document.getElementById('visibleCount');
+  document.getElementById('year').textContent = new Date().getFullYear();
+  totalCount.textContent = anomalies.length;
+
+  function badgeClass(sev){
+    return sev === "danger" ? "badge sev-danger" : (sev === "warn" ? "badge sev-warn" : "badge sev-ok");
+  }
+
+  function render(list){
+    grid.innerHTML = "";
+    list.forEach(a=>{
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.tabIndex = 0;
+      card.setAttribute('data-code', a.code);
+      card.setAttribute('data-sev', a.severity);
+
+      card.innerHTML = `
+        <div class="code">${a.code}</div>
+        <div class="title">${a.title}</div>
+        <div class="badges">
+          <span class="${badgeClass(a.severity)}">${a.severity === 'ok' ? 'Low' : a.severity === 'warn' ? 'Medium' : 'High'} severity</span>
+          ${a.tags.map(t=>`<span class="badge">${t}</span>`).join('')}
+        </div>
+        <a class="open" href="${a.href}">Open Dossier →</a>
+      `;
+      grid.appendChild(card);
+    });
+    visibleCount.textContent = list.length;
+  }
+
+  function filter(){
+    const term = q.value.trim().toLowerCase();
+    const sev = severity.value;
+    const list = anomalies.filter(a=>{
+      const inText = !term || a.code.toLowerCase().includes(term) || a.title.toLowerCase().includes(term) || a.tags.join(" ").toLowerCase().includes(term);
+      const inSev = !sev || a.severity === sev;
+      return inText && inSev;
+    });
+    render(list);
+  }
+
+  q.addEventListener('input', filter);
+  severity.addEventListener('change', filter);
+
+  // keyboard quick nav: up/down selects, enter opens
+  document.addEventListener('keydown', (e)=>{
+    if(!['ArrowDown','ArrowUp','Enter'].includes(e.key)) return;
+    const cards = Array.from(document.querySelectorAll('.card'));
+    if(!cards.length) return;
+
+    const active = document.activeElement;
+    const idx = cards.indexOf(active);
+    if(e.key === 'ArrowDown'){
+      e.preventDefault();
+      const next = cards[Math.min((idx+1), cards.length-1)] || cards[0];
+      next.focus();
+    } else if(e.key === 'ArrowUp'){
+      e.preventDefault();
+      const prev = cards[Math.max((idx-1), 0)] || cards[cards.length-1];
+      prev.focus();
+    } else if(e.key === 'Enter'){
+      if(active && active.classList.contains('card')){
+        const link = active.querySelector('.open');
+        if(link) window.location.href = link.getAttribute('href');
+      }
+    }
+  });
+
+  // Initial paint
+  render(anomalies);
+</script>
+</body>
+</html>
 
