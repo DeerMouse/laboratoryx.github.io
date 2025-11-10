@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>The Laboratory — Calculator</title>
+  <meta name="description" content="A powerful click-first calculator for The Laboratory." />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0e0f12; --panel:#121418; --panel-2:#15181d; --ink:#e7e9ed; --muted:#8c96a3; --line:rgba(255,255,255,.08);
+      --accent:#e6b422; --accent-2:#6ee7b7; --danger:#ef4444; --card:#14171c; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --r-lg:16px; --r-md:12px; --r-sm:10px; --ring:0 0 0 2px rgba(230,180,34,.18);
+      --btn:#1a1f27; --btn-hover:#202633; --btn-ops:#2a2f3a; --btn-eq:#374151; --green:#22c55e
+    }
+    [data-theme="light"]{
+      --bg:#f6f7fb; --panel:#ffffff; --panel-2:#eef1f6; --ink:#0f141a; --muted:#5b6574; --line:rgba(0,0,0,.08);
+      --accent:#b08900; --accent-2:#118f6b; --danger:#b91c1c; --card:#ffffff; --shadow:0 10px 30px rgba(0,0,0,.08);
+      --ring:0 0 0 2px rgba(176,137,0,.18); --btn:#eef1f6; --btn-hover:#e4e8ef; --btn-ops:#e9edf4; --btn-eq:#e6e9f0
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0; font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial; background:var(--bg); color:var(--ink)}
+
+    header{display:flex; align-items:center; justify-content:space-between; gap:10px; padding:10px 16px; background:var(--panel-2); border-bottom:1px solid var(--line); position:sticky; top:0; z-index:5}
+    .brand{display:flex; gap:10px; align-items:center}
+    .mark{width:36px; height:36px; border-radius:10px; background:conic-gradient(from 180deg,#20242b,#1a1f27,#2a2f38); border:1px solid var(--line); position:relative}
+    .mark:after{content:""; position:absolute; inset:7px; border-radius:6px; border:2px solid var(--accent); transform:rotate(8deg); opacity:.85}
+    .btn{border:1px solid var(--line); background:var(--panel); color:var(--ink); border-radius:10px; padding:8px 12px; font-weight:600; cursor:pointer; transition:.18s; text-decoration:none; display:inline-flex; align-items:center; gap:8px}
+    .btn:hover{transform:translateY(-1px)} .btn:active{transform:translateY(0)} .btn.primary{border-color:rgba(230,180,34,.35); box-shadow:var(--shadow)} .btn.ghost{background:transparent}
+
+    main{padding:16px; display:grid; gap:12px; grid-template-columns: 1fr 380px}
+    .card{background:var(--card); border:1px solid var(--line); border-radius:var(--r-lg); padding:16px; box-shadow:var(--shadow)}
+    h2{margin:0 0 8px 0}
+    .muted{color:var(--muted)}
+
+    /* Calculator layout */
+    .calc{display:grid; grid-template-rows: auto auto 1fr; gap:10px}
+    .display{background:rgba(255,255,255,.03); border:1px solid var(--line); border-radius:12px; padding:12px; font-family:ui-monospace,Consolas,monospace}
+    .expr{font-size:14px; color:var(--muted); min-height:20px; word-wrap:anywhere}
+    .value{font-size:28px; font-weight:800; text-align:right}
+
+    .toggles{display:flex; gap:8px; flex-wrap:wrap}
+    .seg{display:inline-flex; border:1px solid var(--line); border-radius:999px; overflow:hidden}
+    .seg button{background:var(--panel); padding:6px 10px; border:none; color:var(--ink)}
+    .seg button.active{background:var(--accent-2); color:#0a0f12; font-weight:800}
+
+    .keypad{display:grid; grid-template-columns: repeat(6, 1fr); gap:8px}
+    .k{border:1px solid var(--line); background:var(--btn); border-radius:12px; padding:12px; text-align:center; font-weight:800; cursor:pointer; user-select:none}
+    .k:hover{background:var(--btn-hover)}
+    .k.op{background:var(--btn-ops)}
+    .k.eq{background:var(--btn-eq)}
+    .k.wide{grid-column: span 2}
+    .k.tall{grid-row: span 2}
+
+    /* Side panel */
+    .side h3{margin:0 0 6px 0}
+    .list{display:grid; gap:8px}
+    .chip{padding:6px 10px; border-radius:999px; border:1px solid var(--line); font-weight:700; font-size:11px; color:var(--muted)}
+    .row{display:flex; gap:8px; flex-wrap:wrap}
+    .result{font-family:ui-monospace,Consolas,monospace; background:rgba(255,255,255,.03); border:1px dashed var(--line); border-radius:10px; padding:8px 10px; white-space:pre-wrap}
+
+    /* Converter */
+    .conv{display:grid; gap:8px; grid-template-columns: repeat(2,1fr)}
+    .conv select, .conv input{background:var(--panel); color:var(--ink); border:1px solid var(--line); border-radius:10px; padding:10px 12px}
+    .conv .full{grid-column:1 / -1}
+
+    @media (max-width: 1100px){ main{grid-template-columns: 1fr} }
+  </style>
+</head>
+<body data-theme="dark">
+  <header>
+    <div class="brand">
+      <div class="mark" aria-hidden="true"></div>
+      <h1 style="margin:0; font-size:16px; letter-spacing:.12em; text-transform:uppercase; font-weight:800">The Laboratory — Calculator</h1>
+    </div>
+    <div class="row">
+      <button class="btn ghost" id="theme">🌗 Theme</button>
+      <a class="btn" href="TheLaboratory.html">↩ Return to Index</a>
+    </div>
+  </header>
+
+  <main>
+    <!-- Left: Click-first calculator -->
+    <section class="card calc" id="calcCard">
+      <div class="display">
+        <div class="expr" id="exprShow">0</div>
+        <div class="value" id="valShow">0</div>
+      </div>
+      <div class="toggles">
+        <div class="seg" role="tablist" aria-label="Angle Mode">
+          <button class="active" id="degBtn">Deg</button>
+          <button id="radBtn">Rad</button>
+        </div>
+        <div class="seg" role="tablist" aria-label="Shift">
+          <button class="active" id="normBtn">Norm</button>
+          <button id="shiftBtn">Shift</button>
+        </div>
+        <span class="chip">Constants: π, e, c, g₀</span>
+      </div>
+
+      <div class="keypad" id="pad">
+        <!-- Row 1 -->
+        <div class="k op" data-act="clear">AC</div>
+        <div class="k op" data-act="back">⌫</div>
+        <div class="k op" data-ins="(">(</div>
+        <div class="k op" data-ins=")">)</div>
+        <div class="k op" data-ins=",">,</div>
+        <div class="k op" data-ins="/">÷</div>
+        <!-- Row 2 -->
+        <div class="k" data-ins="7">7</div>
+        <div class="k" data-ins="8">8</div>
+        <div class="k" data-ins="9">9</div>
+        <div class="k op" data-ins="*">×</div>
+        <div class="k op" data-ins="^">xʸ</div>
+        <div class="k op" data-fn="sqrt">√</div>
+        <!-- Row 3 -->
+        <div class="k" data-ins="4">4</div>
+        <div class="k" data-ins="5">5</div>
+        <div class="k" data-ins="6">6</div>
+        <div class="k op" data-ins="-">−</div>
+        <div class="k op" data-fn="log10">log</div>
+        <div class="k op" data-fn="ln">ln</div>
+        <!-- Row 4 -->
+        <div class="k" data-ins="1">1</div>
+        <div class="k" data-ins="2">2</div>
+        <div class="k" data-ins="3">3</div>
+        <div class="k op" data-ins="+">+</div>
+        <div class="k op" data-fn="sin">sin</div>
+        <div class="k op" data-fn="cos">cos</div>
+        <!-- Row 5 -->
+        <div class="k wide" data-ins="0">0</div>
+        <div class="k" data-ins=".">.</div>
+        <div class="k op" data-fn="tan">tan</div>
+        <div class="k eq tall" data-act="eval">=</div>
+        <!-- Row 6 -->
+        <div class="k op" data-const="pi">π</div>
+        <div class="k op" data-const="e">e</div>
+        <div class="k op" data-const="c">c</div>
+        <div class="k op" data-const="g0">g₀</div>
+        <div class="k op" data-fn="abs">abs</div>
+        <div class="k op" data-act="ans">Ans</div>
+      </div>
+    </section>
+
+    <!-- Right: History + Converter -->
+    <aside class="card side">
+      <h3>History</h3>
+      <div id="hist" class="list muted">No calculations yet.</div>
+      <h3 style="margin-top:12px">Quick Converter</h3>
+      <div class="conv">
+        <select id="cat"></select>
+        <input id="val" type="number" step="any" value="1" />
+        <select id="uFrom"></select>
+        <select id="uTo"></select>
+        <button class="btn full" id="doConv">Convert</button>
+        <div class="result full" id="convOut">—</div>
+      </div>
+    </aside>
+  </main>
+
+  <script>
+    // ===== theme =====
+    (function(){
+      const saved = localStorage.getItem('labTheme');
+      if(saved) document.body.setAttribute('data-theme', saved);
+      document.getElementById('theme').addEventListener('click', ()=>{
+        const curr = document.body.getAttribute('data-theme')||'dark';
+        const next = curr==='dark'?'light':'dark';
+        document.body.setAttribute('data-theme', next);
+        localStorage.setItem('labTheme', next);
+      });
+    })();
+
+    // ===== calculator engine (button-first) =====
+    const exprShow = document.getElementById('exprShow');
+    const valShow = document.getElementById('valShow');
+    const histEl = document.getElementById('hist');
+
+    let expr = '';
+    let angleMode = 'deg';
+    let shift = false;
+    let lastAnswer = 0;
+
+    // constants
+    const CONST = { pi: Math.PI, e: Math.E, c: 299792458, g0: 9.80665 };
+
+    // exposed safe functions
+    const FN = {
+      sin:x=>Math.sin(angleMode==='deg'?x*Math.PI/180:x),
+      cos:x=>Math.cos(angleMode==='deg'?x*Math.PI/180:x),
+      tan:x=>Math.tan(angleMode==='deg'?x*Math.PI/180:x),
+      asin:x=>(Math.asin(x)*(angleMode==='deg'?180/Math.PI:1)),
+      acos:x=>(Math.acos(x)*(angleMode==='deg'?180/Math.PI:1)),
+      atan:x=>(Math.atan(x)*(angleMode==='deg'?180/Math.PI:1)),
+      log10: x=>Math.log10(x),
+      ln: Math.log,
+      sqrt: Math.sqrt,
+      abs: Math.abs
+    };
+
+    function render(){
+      exprShow.textContent = expr || '0';
+    }
+    function append(text){ expr += text; render(); }
+    function insertFn(name){
+      if(shift){ // inverse functions on shift
+        const inv = {sin:'asin', cos:'acos', tan:'atan', log10:'exp', ln:'exp'};
+        if(inv[name]==='exp') { append('exp('); return; }
+        append(inv[name] + '(');
+      } else {
+        append(name + '(');
+      }
+    }
+
+    // keypad wiring
+    document.getElementById('pad').addEventListener('click', (e)=>{
+      const k = e.target.closest('.k');
+      if(!k) return;
+      if(k.dataset.ins){ append(k.dataset.ins); }
+      else if(k.dataset.fn){ insertFn(k.dataset.fn); }
+      else if(k.dataset.const){ append(k.dataset.const); }
+      else if(k.dataset.act){
+        const act = k.dataset.act;
+        if(act==='clear'){ expr=''; valShow.textContent='0'; render(); }
+        else if(act==='back'){ expr = expr.slice(0,-1); render(); }
+        else if(act==='eval'){ doEval(); }
+        else if(act==='ans'){ append('Ans'); }
+      }
+    });
+
+    // toggles
+    document.getElementById('degBtn').addEventListener('click',()=>{ angleMode='deg'; toggleSeg('degBtn','radBtn'); });
+    document.getElementById('radBtn').addEventListener('click',()=>{ angleMode='rad'; toggleSeg('radBtn','degBtn'); });
+    document.getElementById('shiftBtn').addEventListener('click',()=>{ shift=true; toggleSeg('shiftBtn','normBtn'); });
+    document.getElementById('normBtn').addEventListener('click',()=>{ shift=false; toggleSeg('normBtn','shiftBtn'); });
+    function toggleSeg(on,off){ document.getElementById(on).classList.add('active'); document.getElementById(off).classList.remove('active'); }
+
+    // safe evaluate (since all input comes from our buttons)
+    function doEval(){
+      try{
+        const js = toJS(expr);
+        const scope = { ...CONST, ...FN, Ans: lastAnswer, pi: CONST.pi };
+        const args = Object.keys(scope); const vals = Object.values(scope);
+        const f = new Function(...args, `"use strict"; return (${js});`);
+        const result = f(...vals);
+        lastAnswer = result;
+        valShow.textContent = String(result);
+        pushHist(expr + ' = ' + result);
+      }catch(err){ valShow.textContent = 'Error'; console.error(err); }
+    }
+
+    function toJS(s){
+      if(!s) return '0';
+      // Replace unicode pi if typed somehow
+      s = s.replace(/π/g,'pi');
+      // Power
+      s = s.replace(/\^/g,'**');
+      // Multiply symbols
+      s = s.replace(/×/g,'*').replace(/÷/g,'/');
+      // Allowed tokens: numbers, operators, parentheses, comma, constants, Ans, functions letters and underscore
+      if(/[^0-9+\-*/%^()., A-Za-z_]/.test(s)) throw new Error('Bad token');
+      return s;
+    }
+
+    function pushHist(line){
+      const div = document.createElement('div');
+      div.className='result';
+      div.textContent = line;
+      div.addEventListener('click', ()=>{ expr = line.split(' = ')[0]; render(); });
+      if(histEl.textContent==='No calculations yet.') histEl.textContent='';
+      histEl.prepend(div);
+    }
+
+    // ===== Converter (simplified quick) =====
+    const UNITS = {
+      Length: { base:'m', u:{ 'mm':1e-3,'cm':1e-2,'m':1,'km':1e3,'inch':0.0254,'ft':0.3048,'yd':0.9144,'mile':1609.344 }},
+      Mass: { base:'kg', u:{ 'g':1e-3,'kg':1,'kati (catty)':0.60478982,'tahil':0.03779936375,'lb':0.45359237 }},
+      Volume: { base:'m3', u:{ 'mL':1e-6,'L':1e-3,'m3':1 }},
+      Speed: { base:'m/s', u:{ 'm/s':1,'km/h':1/3.6,'mph':0.44704,'c':299792458 }},
+      Temperature: { base:'K', u:{ '°C':'C','°F':'F','K':'K' } }
+    };
+    const cat = document.getElementById('cat');
+    const val = document.getElementById('val');
+    const uFrom = document.getElementById('uFrom');
+    const uTo = document.getElementById('uTo');
+    const convOut = document.getElementById('convOut');
+
+    function fillCats(){ cat.innerHTML = Object.keys(UNITS).map(k=>`<option>${k}</option>`).join(''); cat.value='Length'; fillUnits('Length'); }
+    function fillUnits(kind){
+      const u = UNITS[kind].u; const opts = Object.keys(u).map(k=>`<option>${k}</option>`).join('');
+      uFrom.innerHTML = opts; uTo.innerHTML = opts; uFrom.selectedIndex=0; uTo.selectedIndex=1;
+    }
+    cat.addEventListener('change', ()=>fillUnits(cat.value));
+
+    document.getElementById('doConv').addEventListener('click', ()=>{
+      const kind = cat.value; const x = parseFloat(val.value); if(!isFinite(x)){ convOut.textContent='Enter a number'; return; }
+      if(kind==='Temperature'){
+        const f = uFrom.value, t = uTo.value; let K;
+        if(f==='K') K=x; else if(f==='°C') K=x+273.15; else if(f==='°F') K=(x-32)*5/9+273.15;
+        let out = K; if(t==='K') out=K; else if(t==='°C') out=K-273.15; else if(t==='°F') out=(K-273.15)*9/5+32;
+        convOut.textContent = `${x} ${f} = ${out} ${t}`; return;
+      }
+      const base = UNITS[kind].u[uFrom.value]; const to = UNITS[kind].u[uTo.value];
+      const y = x * (base / to);
+      convOut.textContent = `${x} ${uFrom.value} = ${y} ${uTo.value}`;
+    });
+
+    fillCats();
+    render();
+  </script>
+</body>
+</html>
