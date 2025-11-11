@@ -84,14 +84,22 @@
   .distort{position:fixed;inset:0;pointer-events:none;z-index:8;backdrop-filter:blur(0px);animation:distortAnim 7s infinite ease-in-out}
   @keyframes distortAnim{0%{backdrop-filter:blur(0px);}15%{backdrop-filter:blur(1.6px);}30%{backdrop-filter:blur(0);}50%{backdrop-filter:blur(2.6px);}70%{backdrop-filter:blur(0);}90%{backdrop-filter:blur(1px);}100%{backdrop-filter:blur(0);}}
 </style>
-<body>
+<body class="bg-black text-red-600 min-h-screen p-6">
+    <header class="text-center mb-10">
+        <h1 class="text-5xl font-bold tracking-widest text-red-700 drop-shadow-[0_0_10px_#7f0000]">
+            Welcome to my Lab
+        </h1>
+        <p class="mt-4 text-lg text-red-500 italic opacity-80">
+            this the area you will saw a lot of stuff I will describe the future upcoming experiment of the laboratory of mine
+        </p>
+    </header>
 <div class="lab-flicker"></div>
 <div class="blood-spray"></div>
 <div class="shadow-crawler"></div>
 <div class="monitor-scan"></div>
 <div class="distort"></div>
   <div class="stage">
-    <h1 class="glitch" data-text="Welcome to my Lab">Welcome to my Lab</h1>
+    <h1 class="glitch" data-text="They're Watching">They're Watching</h1>
     <p class="lead">The page feels alive — look around. Eyes follow. Shadows breathe. If you stay too long they will notice.</p>
   </div>
 
