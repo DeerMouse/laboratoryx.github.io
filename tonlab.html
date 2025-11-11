@@ -287,5 +287,52 @@
     });
 
   </script>
+  <!-- AI Chatbox UI -->
+  <div id="ai-chatbox" style="position: fixed; bottom: 20px; right: 20px; width: 260px; background: #0a0a0a; border: 2px solid #550000; border-radius: 10px; padding: 10px; box-shadow: 0 0 15px #400000; z-index: 999999; color: #ff0000; font-family: 'Courier New', monospace;">
+    <div id="ai-log" style="height: 180px; overflow-y: auto; font-size: 12px; padding: 5px; border-bottom: 1px solid #550000;">AI: <i>...listening...</i></div>
+    <input id="ai-input" type="text" placeholder="Say something..." style="width: 100%; margin-top: 8px; background: #111; color: #ff4444; border: 1px solid #550000; padding: 5px; font-family: 'Courier New';" />
+  </div>
+
+  <script>
+    const aiLog = document.getElementById('ai-log');
+    const aiInput = document.getElementById('ai-input');
+
+    // Simple offline "AI" behavior
+    function evilAIResponse(msg) {
+      msg = msg.toLowerCase();
+
+      if (msg.includes('hello') || msg.includes('hi'))
+        return "I have been waiting for you...";
+
+      if (msg.includes('who') && msg.includes('are'))
+        return "I am the one watching from the dark.";
+
+      if (msg.includes('eyes'))
+        return "They only watch because *I* tell them to.";
+
+      if (msg.includes('help'))
+        return "No one can help you now.";
+
+      if (msg.includes('bye'))
+        return "You cannot leave. Not anymore.";
+
+      return "I hear your thoughts even when you don't speak.";
+    }
+
+    aiInput.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' && aiInput.value.trim() !== '') {
+        const userText = aiInput.value;
+        aiLog.innerHTML += `<br><span style='color:#ff6666;'>You:</span> ${userText}`;
+
+        setTimeout(() => {
+          const response = evilAIResponse(userText);
+          aiLog.innerHTML += `<br>AI: ${response}`;
+          aiLog.scrollTop = aiLog.scrollHeight;
+        }, 600);
+
+        aiInput.value = '';
+      }
+    });
+  </script>
 </body>
 </html>
