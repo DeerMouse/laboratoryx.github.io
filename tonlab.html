@@ -218,5 +218,74 @@
       if (Math.random() < 0.15) jumpscare();
     }, 9000);
   </script>
+  <!-- Existing haunted elements remain -->
+  <div id="cursor" class="cursedCursor"></div>
+  <div class="shadow-creature"></div>
+
+  <!-- Multiple creepy eyes following cursor -->
+  <div id="eyes-container"></div>
+
+  <script>
+    const cursor = document.getElementById('cursor');
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+    });
+
+    // Create many eyes
+    const eyesContainer = document.getElementById('eyes-container');
+    const eyeCount = 20;
+
+    for (let i = 0; i < eyeCount; i++) {
+      const eye = document.createElement('div');
+      eye.classList.add('eye');
+
+      const pupil = document.createElement('div');
+      pupil.classList.add('pupil');
+
+      eye.appendChild(pupil);
+
+      eye.style.position = 'fixed';
+      eye.style.width = '40px';
+      eye.style.height = '40px';
+      eye.style.borderRadius = '50%';
+      eye.style.border = '3px solid #700000';
+      eye.style.background = '#0a0a0a';
+
+      // random position
+      eye.style.top = Math.random() * 90 + '%';
+      eye.style.left = Math.random() * 90 + '%';
+
+      pupil.style.width = '15px';
+      pupil.style.height = '15px';
+      pupil.style.borderRadius = '50%';
+      pupil.style.background = '#ff0000';
+      pupil.style.position = 'absolute';
+      pupil.style.top = '50%';
+      pupil.style.left = '50%';
+      pupil.style.transform = 'translate(-50%, -50%)';
+      pupil.style.transition = '0.1s linear';
+
+      eyesContainer.appendChild(eye);
+    }
+
+    // Make all eyes follow the cursor
+    document.addEventListener('mousemove', e => {
+      document.querySelectorAll('.eye').forEach(eye => {
+        const pupil = eye.querySelector('.pupil');
+        const rect = eye.getBoundingClientRect();
+
+        const eyeX = rect.left + rect.width / 2;
+        const eyeY = rect.top + rect.height / 2;
+
+        const angle = Math.atan2(e.clientY - eyeY, e.clientX - eyeX);
+        const moveX = Math.cos(angle) * 8;
+        const moveY = Math.sin(angle) * 8;
+
+        pupil.style.transform = `translate(${moveX}px, ${moveY}px)`;
+      });
+    });
+
+  </script>
 </body>
 </html>
