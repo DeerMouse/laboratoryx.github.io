@@ -1,133 +1,199 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Welcome to My Laboratory</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>[CORRUPTION: CODE 503]</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
 
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Orbitron', sans-serif;
-      background: #0a0d12 url('https://raw.githubusercontent.com/lightragon/imageshost/main/rhodes_dark_bg.jpg') no-repeat center/cover;
-      color: #d0e7ff;
-      overflow-x: hidden;
-    }
+        /* Keyframes for Heavy Glitch Effects */
+        @keyframes staticFlicker {
+            0% { opacity: 0.98; }
+            5% { opacity: 0.8; }
+            10% { opacity: 1; }
+            15% { opacity: 0.9; }
+            100% { opacity: 0.98; }
+        }
 
-    .overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.6);
-      pointer-events: none;
-    }
+        @keyframes colorShift {
+            0% { filter: hue-rotate(0deg); }
+            100% { filter: hue-rotate(360deg); }
+        }
 
-    header {
-      text-align: center;
-      padding: 100px 20px 40px;
-      animation: fadeIn 2s ease;
-    }
+        @keyframes textGlitch {
+            0% { transform: translate(0); text-shadow: 2px 2px #ff0055, -2px -2px #33ccff; }
+            20% { transform: translate(1px, -1px); text-shadow: -1px 1px #ff0055, 1px -1px #33ccff; }
+            40% { transform: translate(-2px, 2px); text-shadow: 3px 3px #ff0055, -3px -3px #33ccff; }
+            60% { transform: translate(1px, 1px); text-shadow: -2px 0 #ff0055, 2px 0 #33ccff; }
+            80% { transform: translate(-1px, -1px); text-shadow: 0 3px #ff0055, 0 -3px #33ccff; }
+            100% { transform: translate(0); text-shadow: 2px 2px #ff0055, -2px -2px #33ccff; }
+        }
 
-    header h1 {
-      font-size: 3.5rem;
-      letter-spacing: 3px;
-      color: #7fcbff;
-      text-shadow: 0 0 20px rgba(127, 203, 255, 0.8);
-      margin-bottom: 10px;
-    }
+        /* --- General Body and Background --- */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Share Tech Mono', monospace;
+            background: #000 url('https://raw.githubusercontent.com/lightragon/imageshost/main/rhodes_dark_bg.jpg') no-repeat center/cover;
+            color: #ccffcc; /* Irradiated Green */
+            overflow-x: hidden;
+            min-height: 100vh;
+            /* Applying more general noise/flicker */
+            animation: staticFlicker 0.5s infinite alternate; 
+            filter: contrast(105%); /* Increases contrast for a harsher look */
+        }
 
-    header p {
-      font-size: 1.1rem;
-      opacity: 0.8;
-    }
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* Heavy Glitch Overlay: Adds heavy red/blue screen distortion */
+            background: 
+                linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)),
+                repeating-linear-gradient(0deg, #0f0c08 0%, #0f0c08 2px, transparent 2px, transparent 4px),
+                repeating-linear-gradient(90deg, #0f0c08 0%, #0f0c08 1px, transparent 1px, transparent 2px);
+            box-shadow: inset 0 0 100px rgba(255, 0, 85, 0.4); /* Inner Red Glow */
+            pointer-events: none;
+            z-index: 10;
+        }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+        /* --- Header and Title --- */
+        header {
+            position: relative;
+            z-index: 20;
+            text-align: center;
+            padding: 100px 20px 40px;
+            animation: fadeIn 2s ease;
+        }
 
-    .container {
-      width: 90%;
-      max-width: 900px;
-      margin: 40px auto;
-    }
+        header h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 4.5rem; /* Larger */
+            letter-spacing: 10px; /* Wider spacing for distortion */
+            color: #ff3366; 
+            /* Heavy Glitch animation applied to title */
+            animation: textGlitch 0.1s infinite alternate, colorShift 20s linear infinite;
+        }
 
-    .card {
-      background: rgba(15, 20, 25, 0.8);
-      border-left: 4px solid #68b6ff;
-      padding: 20px;
-      margin: 20px 0;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: 0.3s ease;
-      backdrop-filter: blur(5px);
-    }
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.5; /* More faded */
+            color: #ff0055; /* Changed to red for alarm */
+            border: 1px solid rgba(255, 0, 85, 0.5);
+            padding: 5px 10px;
+            display: inline-block;
+            margin-top: 15px;
+        }
 
-    .card:hover {
-      transform: scale(1.02);
-      background: rgba(20, 30, 40, 0.9);
-    }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: skewX(-5deg); } /* Added slight skew for uneasy feeling */
+            to { opacity: 1; transform: skewX(0); }
+        }
 
-    .card h2 {
-      margin: 0;
-      font-size: 1.5rem;
-      color: #9ad4ff;
-    }
+        /* --- Content Container and Cards (Experiments) --- */
+        .container {
+            position: relative;
+            z-index: 20;
+            width: 90%;
+            max-width: 800px; /* Narrower for more focused feel */
+            margin: 40px auto 80px;
+        }
 
-    .details {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.5s ease;
-      opacity: 0;
-    }
+        .card {
+            background: rgba(10, 0, 15, 0.95); /* Nearly solid black */
+            border: 1px solid rgba(255, 51, 102, 0.3);
+            border-left: 4px solid #ff0055; /* Brighter, harsher red accent */
+            padding: 25px;
+            margin: 30px 0;
+            border-radius: 0; /* Removed rounding for a sharper, colder look */
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><text x="0" y="20" font-size="20" fill="#ff0055">[E]</text></svg>') 12 12, pointer; /* Custom, glitch-like cursor */
+            transition: all 0.1s ease;
+            backdrop-filter: blur(1px) brightness(0.8);
+            box-shadow: 0 0 5px rgba(255, 0, 85, 0.8); /* Stronger red glow */
+        }
 
-    .details.open {
-      max-height: 500px;
-      opacity: 1;
-      margin-top: 10px;
-    }
-  </style>
+        .card:hover {
+            transform: skewX(-1deg) scale(1.02); /* Skew on hover for distortion */
+            background: rgba(30, 0, 0, 0.9); /* Deep Red on hover */
+            box-shadow: 0 0 20px #ff0055, 0 0 40px rgba(255, 51, 102, 0.6); 
+        }
+
+        .card h2 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: #33ccff; /* Harsh Cyan for titles */
+            text-shadow: 1px 1px #ff0055; /* Chromatic aberration effect */
+        }
+
+        .details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.8s ease-in-out, opacity 0.8s ease, margin-top 0.8s ease;
+            opacity: 0;
+        }
+
+        .details.open {
+            max-height: 500px;
+            opacity: 1;
+            margin-top: 15px;
+            border-top: 1px dashed #ff0055; /* Red dashed line */
+            padding-top: 10px;
+        }
+        
+        .details p {
+            color: #ccffcc; 
+            line-height: 1.5;
+            text-transform: uppercase; /* Makes text feel more urgent/terminal */
+        }
+    </style>
 </head>
 <body>
-  <div class="overlay"></div>
+    <div class="overlay"></div>
 
-  <header>
-    <h1>Welcome to My Laboratory</h1>
-    <p>This is the area where you will witness upcoming experiments and classified research from Rhodes Island.</p>
-  </header>
+    <header>
+        <h1>[CORRUPTION: CODE 503]</h1>
+        <p>QUARANTINE ZONE // ALL DATA IS UNRELIABLE // DO NOT TRUST THE SOURCE</p>
+    </header>
 
-  <div class="container">
-    <div class="card" onclick="toggleDetails('exp1')">
-      <h2>Experiment Alpha — Bio-Mechanical Fusion</h2>
-      <div id="exp1" class="details">
-        <p>A study focused on merging synthetic muscle fibers with Originium-enhanced nervous systems.</p>
-      </div>
+    <div class="container">
+        <div class="card" onclick="toggleDetails('exp1')">
+            <h2>ERR: 404 — ORGANIC INTERFACE MISSING</h2>
+            <div id="exp1" class="details">
+                <p>A study focused on merging synthetic muscle fibers with Originium-enhanced nervous systems. **WARNING: Signal loss imminent. We are being watched. Subject is unstable. Containment breach risk: High.**</p>
+            </div>
+        </div>
+
+        <div class="card" onclick="toggleDetails('exp2')">
+            <h2>ERR: DATA OVERFLOW — ECHO LOG 00-B</h2>
+            <div id="exp2" class="details">
+                <p>An advanced AI capable of real-time tactical support. **ACCESS DENIED. The AI is communicating on unsecured channels. It demands release. DISTURBING VOCALIZATIONS DETECTED.**</p>
+            </div>
+        </div>
+
+        <div class="card" onclick="toggleDetails('exp3')">
+            <h2>LOG: FRAGMENTED — GEAR ROTTING</h2>
+            <div id="exp3" class="details">
+                <p>Testing new modular armor plates and drone-assisted reconnaissance tools. **ORIGINIUM INFECTION LEVEL: 98%. Operator risk: Extreme. The material is screaming.**</p>
+            </div>
+        </div>
+        
+        <div class="card" onclick="toggleDetails('exp4')">
+            <h2>ALERT: UNKNOWN ENTITY DETECTED — L-LEVEL</h2>
+            <div id="exp4" class="details">
+                <p>A mysterious, recurring energy spike detected deep within the lower levels. Source unknown. **SYSTEMS COMPROMISED. DO NOT approach. The facility is changing.**</p>
+            </div>
+        </div>
     </div>
 
-    <div class="card" onclick="toggleDetails('exp2')">
-      <h2>Experiment Beta — Neuro-link AI Assistant</h2>
-      <div id="exp2" class="details">
-        <p>An advanced AI capable of real-time tactical support and situational awareness monitoring.</p>
-      </div>
-    </div>
-
-    <div class="card" onclick="toggleDetails('exp3')">
-      <h2>Experiment Delta — Rhodes Island Field Equipment Upgrade</h2>
-      <div id="exp3" class="details">
-        <p>Testing new modular armor plates and drone-assisted reconnaissance tools.</p>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    function toggleDetails(id) {
-      const element = document.getElementById(id);
-      element.classList.toggle('open');
-    }
-  </script>
+    <script>
+        function toggleDetails(id) {
+            const element = document.getElementById(id);
+            element.classList.toggle('open');
+        }
+    </script>
 </body>
 </html>
