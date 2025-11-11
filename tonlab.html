@@ -6,63 +6,45 @@
   <title>Example HTML Page</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: "Courier New", monospace;
       margin: 0;
       padding: 20px;
-      background: #0c0c0c;
-      color: #e0e0e0;
+      background: #020202;
+      color: #b20000;
       overflow-x: hidden;
-    }
-    header {
-      background: linear-gradient(135deg, #1a1a1a, #333);
-      color: #fff;
-      padding: 40px 20px;
-      text-align: center;
-      border-radius: 15px;
-      animation: fadeIn 1.5s ease;
-      box-shadow: 0 0 25px rgba(0,0,0,0.6);
+      cursor: none;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-20px); }
-      to { opacity: 1; transform: translateY(0); }
+    /* Flicker effect */
+    @keyframes flicker {
+      0%, 18%, 22%, 25%, 53%, 57%, 100% { opacity: 1; }
+      20%, 24%, 55% { opacity: 0.4; }
+    }
+
+    header {
+      background: #0a0a0a;
+      color: #ff0000;
+      padding: 40px 20px;
+      text-align: center;
+      border-radius: 10px;
+      animation: flicker 3s infinite;
+      box-shadow: 0 0 25px #400000;
     }
 
     .card {
-      background: #1a1a1a;
+      background: #0a0a0a;
       padding: 25px;
       margin-top: 30px;
-      border-radius: 15px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      border-radius: 10px;
+      box-shadow: 0 0 15px #300000;
       position: relative;
       overflow: hidden;
-      animation: cardPop 0.8s ease;
-    }
-
-    @keyframes cardPop {
-      from { opacity: 0; transform: scale(0.9); }
-      to { opacity: 1; transform: scale(1); }
-    }
-
-    .card::before {
-      content: "";
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, rgba(70,70,70,0.2), transparent 60%);
-      animation: rotateGlow 8s linear infinite;
-    }
-
-    @keyframes rotateGlow {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
+      animation: flicker 4s infinite;
     }
 
     h1, h2 {
-      font-weight: 700;
-      letter-spacing: 1px;
+      color: #ff1a1a;
+      text-shadow: 0 0 5px #800000;
     }
 
     ul li {
@@ -72,10 +54,45 @@
     footer {
       margin-top: 40px;
       text-align: center;
-      color: #888;
-      font-size: 14px;
-      animation: fadeIn 2s ease;
+      color: #550000;
+      animation: flicker 6s infinite;
     }
+
+    /* Glowing cursed cursor */
+    .cursedCursor {
+      position: fixed;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: rgba(255,0,0,0.6);
+      box-shadow: 0 0 25px rgba(255,0,0,0.9);
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      z-index: 99999;
+    }
+
+    /* Creepy rat replaced with haunted shadow creature */
+    @keyframes shadowWalk {
+      0% { left: -120px; filter: blur(3px); opacity: 0.4; }
+      45% { left: calc(100% + 120px); opacity: 0.6; }
+      50% { transform: scaleX(-1); }
+      100% { left: -120px; opacity: 0.4; }
+    }
+
+    .shadow-creature {
+      position: fixed;
+      bottom: 10px;
+      left: -120px;
+      width: 110px;
+      height: 70px;
+      background-image: url('https://i.imgur.com/FZk0lUG.png'); /* spooky silhouette */
+      background-size: contain;
+      background-repeat: no-repeat;
+      animation: shadowWalk 12s linear infinite;
+      z-index: 9999;
+      filter: grayscale(100%) brightness(0.5);
+    }
+
   </style>
 </head>
 <body>
@@ -125,9 +142,9 @@
     rat.style.position = 'fixed';
     rat.style.bottom = '20px';
     rat.style.left = '-80px';
-    rat.style.width = '80px';
-    rat.style.height = '60px';
-    rat.style.backgroundImage = "url('TonCheese.png')";
+    rat.style.width = '60px';
+    rat.style.height = '40px';
+    rat.style.backgroundImage = "url('https://i.imgur.com/V2aQ6z7.png')";
     rat.style.backgroundSize = 'contain';
     rat.style.backgroundRepeat = 'no-repeat';
     rat.style.animation = 'walkRat 15s linear infinite';
@@ -138,13 +155,68 @@
     const style = document.createElement('style');
     style.innerHTML = `
       @keyframes walkRat {
-        0% { left: -100px; transform: scaleX(-1); }
-        49% { left: calc(100% + 100px); transform: scaleX(-1); }
-        50% { transform: scaleX(1); }
-        100% { left: -100px; transform: scaleX(1); }
+        0% { left: -100px; transform: scaleX(1); }
+        49% { left: calc(100% + 100px); transform: scaleX(1); }
+        50% { transform: scaleX(-1); }
+        100% { left: -100px; transform: scaleX(-1); }
       }
     `;
     document.head.appendChild(style);
+  </script>
+  <!-- Haunted Cursor -->
+  <div id="cursor" class="cursedCursor"></div>
+
+  <!-- Shadow Creature -->
+  <div class="shadow-creature"></div>
+
+  <script>
+    // Update cursor
+    const cursor = document.getElementById('cursor');
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+    });
+
+    // Random whisper sounds
+    const whispers = [
+      'https://assets.mixkit.co/sfx/preview/mixkit-creepy-whispers-553.mp3',
+      'https://assets.mixkit.co/sfx/preview/mixkit-dark-evil-whispers-1713.mp3'
+    ];
+
+    function randomWhisper() {
+      const audio = new Audio(whispers[Math.floor(Math.random() * whispers.length)]);
+      audio.volume = 0.3;
+      audio.play();
+    }
+
+    setInterval(randomWhisper, 10000 + Math.random() * 8000);
+
+    // Random jumpscare
+    function jumpscare() {
+      const img = document.createElement('img');
+      img.src = 'https://i.imgur.com/SJ4Z0Qh.png';
+      img.style.position = 'fixed';
+      img.style.top = '0';
+      img.style.left = '0';
+      img.style.width = '100%';
+      img.style.height = '100%';
+      img.style.objectFit = 'cover';
+      img.style.zIndex = '999999';
+      img.style.animation = 'none';
+
+      document.body.appendChild(img);
+
+      const scream = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-woman-screaming-731.mp3');
+      scream.volume = 0.6;
+      scream.play();
+
+      setTimeout(() => img.remove(), 1500);
+    }
+
+    // Trigger jumpscare at random times
+    setInterval(() => {
+      if (Math.random() < 0.15) jumpscare();
+    }, 9000);
   </script>
 </body>
 </html>
